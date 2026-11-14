@@ -107,68 +107,61 @@ export const EventModal: React.FC = () => {
 
   if (!modalState.isOpen) return null;
 
-  const handleStartTimeChange = (newStart: string) => {
-    setStartTime(newStart);
-    setEndTime(applyDuration(newStart, selectedDuration));
-  };
-
-  const handleDurationClick = (mins: number) => {
+  const handleDurationSelect = (mins: number) => {
     setSelectedDuration(mins);
     setEndTime(applyDuration(startTime, mins));
   };
 
-  // Local File Upload Handler
+  const handleStartTimeChange = (newStartTime: string) => {
+    setStartTime(newStartTime);
+    setEndTime(applyDuration(newStartTime, selectedDuration));
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
-
-    const newDocs: AttachedDoc[] = files.map(file => {
-      let fileType: AttachedDoc['type'] = 'doc';
-      if (file.type.includes('pdf')) fileType = 'pdf';
-      else if (file.type.includes('image')) fileType = 'image';
-      else if (file.name.endsWith('.sheet') || file.name.endsWith('.xlsx') || file.name.endsWith('.csv')) fileType = 'sheet';
-
-      const sizeKb = Math.round(file.size / 1024);
-      const sizeStr = sizeKb > 1024 ? `${(sizeKb / 1024).toFixed(1)} MB` : `${sizeKb} KB`;
+    const newAttachments: AttachedDoc[] = files.map(f => {
+      let docType: AttachedDoc['type'] = 'doc';
+      if (f.name.endsWith('.pdf')) docType = 'pdf';
+      else if (f.name.match(/\.(xlsx|xls|csv)$/)) docType = 'sheet';
+      else if (f.name.match(/\.(png|jpg|jpeg|svg|webp)$/)) docType = 'image';
 
       return {
-        id: `file-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-        name: file.name,
-        size: sizeStr,
-        type: fileType,
+        id: `upload-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        name: f.name,
+        size: `${(f.size / 1024).toFixed(0)} KB`,
+        type: docType,
         source: 'local',
         uploadedAt: format(new Date(), 'h:mm a')
       };
     });
 
-    setAttachments(prev => [...prev, ...newDocs]);
-    if (fileInputRef.current) fileInputRef.current.value = '';
+    setAttachments(prev => [...prev, ...newAttachments]);
   };
 
-  // Quick attach from OMNI Space
-  const handleAddSpaceDoc = (name: string, type: AttachedDoc['type']) => {
-    const newDoc: AttachedDoc = {
+  const removeAttachment = (id: string) => {
+    setAttachments(prev => prev.filter(a => a.id !== id));
+  };
+
+  const handleAddSpaceDoc = (docName: string) => {
+    const spaceDoc: AttachedDoc = {
       id: `space-${Date.now()}`,
-      name,
+      name: docName,
       size: 'OMNI Space',
-      type,
+      type: 'space',
       source: 'omni_space',
       uploadedAt: format(new Date(), 'h:mm a')
     };
-    setAttachments(prev => [...prev, newDoc]);
-  };
-
-  const removeAttachment = (docId: string) => {
-    setAttachments(prev => prev.filter(d => d.id !== docId));
+    setAttachments(prev => [...prev, spaceDoc]);
   };
 
   const getDocIcon = (type: AttachedDoc['type']) => {
     switch (type) {
-      case 'pdf': return <FileText className="w-3.5 h-3.5 text-rose-400" />;
-      case 'sheet': return <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />;
-      case 'image': return <ImageIcon className="w-3.5 h-3.5 text-indigo-400" />;
-      case 'space': return <Layers className="w-3.5 h-3.5 text-cyan-400" />;
-      default: return <FileCode className="w-3.5 h-3.5 text-sky-400" />;
+      case 'pdf': return <FileText className="w-3.5 h-3.5 text-rose-400 shrink-0" />;
+      case 'sheet': return <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400 shrink-0" />;
+      case 'image': return <ImageIcon className="w-3.5 h-3.5 text-indigo-400 shrink-0" />;
+      case 'space': return <Layers className="w-3.5 h-3.5 text-cyan-400 shrink-0" />;
+      default: return <FileCode className="w-3.5 h-3.5 text-sky-400 shrink-0" />;
     }
   };
 
@@ -176,15 +169,25 @@ export const EventModal: React.FC = () => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    const startIso = new Date(`${startDate}T${startTime}:00`).toISOString();
-    const endIso = new Date(`${startDate}T${endTime}:00`).toISOString();
+    const [startH, startM] = startTime.split(':').map(Number);
+    const [endH, endM] = endTime.split(':').map(Number);
+
+    const start = new Date(startDate);
+    start.setHours(startH, startM, 0, 0);
+
+    const end = new Date(startDate);
+    end.setHours(endH, endM, 0, 0);
+
+    if (end <= start) {
+      end.setDate(end.getDate() + 1);
+    }
 
     const itemPayload: Omit<OmniAgendaItem, 'id'> = {
       title: title.trim(),
-      type: itemType,
       description: description.trim() || undefined,
-      startTime: startIso,
-      endTime: endIso,
+      type: itemType,
+      startTime: start.toISOString(),
+      endTime: end.toISOString(),
       category,
       color: itemType === 'task' ? TASK_GREEN : EVENT_BLUE,
       completed: itemType === 'task' ? isCompleted : undefined,
@@ -214,39 +217,39 @@ export const EventModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-150">
       <div 
-        className="glass-panel w-full max-w-lg max-h-[90vh] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col"
+        className="glass-panel w-full max-w-lg max-h-[92vh] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col bg-[#0e1422]"
         onClick={e => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between shrink-0">
+        {/* Pinned Modal Header */}
+        <div className="px-5 py-3.5 border-b border-white/10 flex items-center justify-between shrink-0 bg-slate-900/60">
           <div className="flex items-center gap-2.5">
             <span 
               className="w-3 h-3 rounded-full" 
               style={{ backgroundColor: itemType === 'task' ? TASK_GREEN : EVENT_BLUE }}
             />
-            <h3 className="text-sm font-semibold text-white">
+            <h3 className="text-sm font-semibold text-white tracking-wide">
               {modalState.item ? `Edit ${itemType === 'task' ? 'Task' : 'Event'}` : 'Schedule Agenda Item'}
             </h3>
           </div>
           <button
             onClick={closeModal}
-            className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+            className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Modal Body */}
-        <form onSubmit={handleSave} className="p-6 space-y-4 overflow-y-auto flex-1">
-          {/* Prominent Auto-filled Slot Indicator */}
-          <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-indigo-500/[0.08] border border-indigo-500/25">
+        {/* Scrollable Form Body */}
+        <form id="event-modal-form" onSubmit={handleSave} className="p-5 space-y-3.5 overflow-y-auto flex-1 text-slate-200">
+          {/* Auto-filled Slot Banner */}
+          <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/25">
             <div className="flex items-center gap-2 text-xs">
               <CalendarCheck className="w-4 h-4 text-indigo-400 shrink-0" />
               <div className="text-slate-300">
-                Time slot: <span className="font-semibold text-indigo-200">{formatFriendlyTime(startTime)} – {formatFriendlyTime(endTime)}</span>
-                <span className="text-slate-400 ml-1.5 font-mono text-[11px]">({selectedDuration}m)</span>
+                Slot: <span className="font-semibold text-indigo-200">{formatFriendlyTime(startTime)} – {formatFriendlyTime(endTime)}</span>
+                <span className="text-slate-400 ml-1 font-mono text-[11px]">({selectedDuration}m)</span>
               </div>
             </div>
             <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold tracking-wider">
@@ -254,223 +257,104 @@ export const EventModal: React.FC = () => {
             </span>
           </div>
 
-          {/* Type Selector (Event Blue vs Task Green) */}
-          <div>
-            <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-              Choose Type
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setItemType('event')}
-                className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold transition-all ${
-                  itemType === 'event'
-                    ? 'bg-blue-600/30 text-blue-200 border-2 border-blue-500 shadow-md shadow-blue-500/20'
-                    : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] border border-white/5'
-                }`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-[#3b82f6]" />
-                <span>Event (Blue)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setItemType('task')}
-                className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold transition-all ${
-                  itemType === 'task'
-                    ? 'bg-emerald-600/30 text-emerald-200 border-2 border-emerald-500 shadow-md shadow-emerald-500/20'
-                    : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] border border-white/5'
-                }`}
-              >
-                <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]" />
-                <span>Task (Green)</span>
-              </button>
-            </div>
+          {/* Type Selector Tabs (Event Blue vs Task Green) */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setItemType('event')}
+              className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold transition-all ${
+                itemType === 'event'
+                  ? 'bg-blue-600/30 text-blue-200 border-2 border-blue-500 shadow-sm shadow-blue-500/20'
+                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] border border-white/5'
+              }`}
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-[#3b82f6]" />
+              <span>Event (Blue)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setItemType('task')}
+              className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold transition-all ${
+                itemType === 'task'
+                  ? 'bg-emerald-600/30 text-emerald-200 border-2 border-emerald-500 shadow-sm shadow-emerald-500/20'
+                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08] border border-white/5'
+              }`}
+            >
+              <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]" />
+              <span>Task (Green)</span>
+            </button>
           </div>
 
-          {/* Title input */}
+          {/* Title Input */}
           <div>
             <input
               type="text"
+              required
               autoFocus
-              placeholder={itemType === 'task' ? 'Task title (e.g. Review legal contract)...' : 'Event title (e.g. Design review meeting)...'}
+              placeholder={itemType === 'task' ? 'Task title (e.g. Prepare deck, Ship PR)...' : 'Event title (e.g. Design review meeting)...'}
               value={title}
               onChange={e => setTitle(e.target.value)}
-              className="w-full bg-transparent text-lg font-medium text-white placeholder-slate-400 border-none outline-none focus:ring-0 px-0"
+              className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30"
             />
           </div>
 
-          {/* Date & Start Time */}
-          <div className="space-y-2 pt-1">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={e => setStartDate(e.target.value)}
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-              <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                  Start Time
-                </label>
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={e => handleStartTimeChange(e.target.value)}
-                  className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-            </div>
-
-            {/* Quick Duration Pills */}
+          {/* Date & Time Row */}
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                Duration
+                Date
               </label>
-              <div className="flex items-center gap-2">
-                {[15, 30, 45, 60, 90, 120].map(mins => (
-                  <button
-                    key={mins}
-                    type="button"
-                    onClick={() => handleDurationClick(mins)}
-                    className={`flex-1 py-1 text-[11px] rounded-lg font-medium transition-colors ${
-                      selectedDuration === mins
-                        ? 'bg-indigo-600 text-white font-semibold shadow-sm'
-                        : 'bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08]'
-                    }`}
-                  >
-                    {mins >= 60 ? `${mins / 60}h` : `${mins}m`}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* ATTACHMENTS & DOCUMENTS SECTION */}
-          <div className="pt-2 border-t border-white/5">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-300 uppercase tracking-wider">
-                <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Attached Documents & Files</span>
-                {attachments.length > 0 && (
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-300">
-                    {attachments.length}
-                  </span>
-                )}
-              </div>
-
-              {/* Upload trigger button */}
-              <div className="flex items-center gap-1.5">
-                <input
-                  type="file"
-                  multiple
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center gap-1 text-[11px] px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
-                >
-                  <Upload className="w-3 h-3 text-indigo-400" />
-                  <span>Upload File</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Attach from OMNI Space Suggestions */}
-            <div className="flex items-center gap-1.5 mb-2.5 overflow-x-auto pb-1 text-[10px]">
-              <span className="text-slate-400 text-[10px] shrink-0">Quick OMNI Space:</span>
-              <button
-                type="button"
-                onClick={() => handleAddSpaceDoc('Architecture_Overview.doc', 'doc')}
-                className="px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/10 text-slate-300 border border-white/5 shrink-0 flex items-center gap-1"
-              >
-                <Plus className="w-2.5 h-2.5 text-sky-400" /> Architecture.doc
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAddSpaceDoc('Sprint_Budget_Model.sheet', 'sheet')}
-                className="px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/10 text-slate-300 border border-white/5 shrink-0 flex items-center gap-1"
-              >
-                <Plus className="w-2.5 h-2.5 text-emerald-400" /> Budget.sheet
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAddSpaceDoc('Project_Kickoff_Slides.space', 'space')}
-                className="px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/10 text-slate-300 border border-white/5 shrink-0 flex items-center gap-1"
-              >
-                <Plus className="w-2.5 h-2.5 text-cyan-400" /> Slides.space
-              </button>
-            </div>
-
-            {/* List of Attached Files */}
-            {attachments.length > 0 ? (
-              <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                {attachments.map(doc => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between p-2 rounded-lg bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-colors"
-                  >
-                    <div className="flex items-center gap-2 truncate">
-                      {getDocIcon(doc.type)}
-                      <span className="text-xs text-slate-200 truncate">{doc.name}</span>
-                      {doc.size && (
-                        <span className="text-[10px] text-slate-400 font-mono shrink-0">
-                          ({doc.size})
-                        </span>
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeAttachment(doc.id)}
-                      className="p-1 text-slate-400 hover:text-rose-400 rounded transition-colors shrink-0"
-                      title="Remove attachment"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div 
-                onClick={() => fileInputRef.current?.click()}
-                className="border border-dashed border-white/10 hover:border-indigo-500/40 rounded-xl p-3 text-center cursor-pointer transition-colors bg-white/[0.01] hover:bg-white/[0.03]"
-              >
-                <Paperclip className="w-4 h-4 text-slate-400 mx-auto mb-1" />
-                <p className="text-[11px] text-slate-400">Click to attach documents, PDFs, or slides</p>
-              </div>
-            )}
-          </div>
-
-          {/* If Task: Complete status */}
-          {itemType === 'task' && (
-            <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
               <input
-                type="checkbox"
-                id="task-complete-chk"
-                checked={isCompleted}
-                onChange={e => setIsCompleted(e.target.checked)}
-                className="rounded border-white/20 text-emerald-600 focus:ring-0 cursor-pointer"
+                type="date"
+                required
+                value={startDate}
+                onChange={e => setStartDate(e.target.value)}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
               />
-              <label htmlFor="task-complete-chk" className="text-xs text-emerald-200 cursor-pointer">
-                Mark task as completed
-              </label>
             </div>
-          )}
+            <div>
+              <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                Start Time
+              </label>
+              <input
+                type="time"
+                required
+                value={startTime}
+                onChange={e => handleStartTimeChange(e.target.value)}
+                className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 font-mono"
+              />
+            </div>
+          </div>
 
-          {/* Category Selection */}
+          {/* Duration Pills */}
           <div>
-            <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
+              Duration
+            </label>
+            <div className="grid grid-cols-6 gap-1.5">
+              {[15, 30, 45, 60, 90, 120].map(mins => (
+                <button
+                  key={mins}
+                  type="button"
+                  onClick={() => handleDurationSelect(mins)}
+                  className={`py-1 rounded-lg text-xs font-medium transition-all ${
+                    selectedDuration === mins
+                      ? 'bg-indigo-600 text-white font-semibold shadow-sm'
+                      : 'bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]'
+                  }`}
+                >
+                  {mins < 60 ? `${mins}m` : mins === 60 ? '1h' : `${mins / 60}h`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Category Chips */}
+          <div>
+            <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
               Category
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {categories.map(cat => (
                 <button
                   key={cat.id}
@@ -492,6 +376,66 @@ export const EventModal: React.FC = () => {
             </div>
           </div>
 
+          {/* Attachments Section */}
+          <div className="pt-1">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Attached Files & Docs</span>
+              </label>
+              <div className="flex items-center gap-1.5">
+                <input
+                  type="file"
+                  multiple
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
+                >
+                  <Upload className="w-3 h-3" />
+                  <span>Upload File</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Attached List or Empty State */}
+            {attachments.length > 0 ? (
+              <div className="space-y-1">
+                {attachments.map(att => (
+                  <div
+                    key={att.id}
+                    className="flex items-center justify-between p-1.5 rounded-lg bg-white/[0.04] border border-white/5 text-xs text-slate-200"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      {getDocIcon(att.type)}
+                      <span className="truncate">{att.name}</span>
+                      {att.size && <span className="text-[10px] text-slate-500 font-mono">({att.size})</span>}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeAttachment(att.id)}
+                      className="p-1 text-slate-400 hover:text-rose-400 transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                className="p-2.5 rounded-xl border border-dashed border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/[0.02] transition-colors cursor-pointer text-center text-slate-400 text-xs flex items-center justify-center gap-2"
+              >
+                <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Click to attach documents, PDFs, or slides</span>
+              </div>
+            )}
+          </div>
+
           {/* Description */}
           <div>
             <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">
@@ -502,68 +446,42 @@ export const EventModal: React.FC = () => {
               placeholder="Add key notes or goals..."
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-lg p-2.5 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500 resize-none"
+              className="w-full bg-white/[0.04] border border-white/10 rounded-lg p-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
             />
           </div>
-
-          {/* Connect to OMNI Space */}
-          <div className="p-3 rounded-xl bg-indigo-500/[0.05] border border-indigo-500/20">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-indigo-400" />
-                <span className="text-xs font-medium text-indigo-200">Connect to OMNI Space</span>
-              </div>
-              <input
-                type="checkbox"
-                checked={linkToSpace}
-                onChange={e => setLinkToSpace(e.target.checked)}
-                className="rounded border-white/20 text-indigo-600 focus:ring-0 cursor-pointer"
-              />
-            </div>
-            {linkToSpace && (
-              <div className="mt-2.5 pt-2 border-t border-indigo-500/10">
-                <input
-                  type="text"
-                  placeholder="Document name in OMNI Space..."
-                  value={spaceDocTitle}
-                  onChange={e => setSpaceDocTitle(e.target.value)}
-                  className="w-full bg-white/[0.05] border border-indigo-500/30 rounded-lg px-2.5 py-1 text-xs text-indigo-100 placeholder-indigo-300/40 focus:outline-none"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div className="pt-3 border-t border-white/5 flex items-center justify-between shrink-0">
-            {modalState.item ? (
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Delete</span>
-              </button>
-            ) : <div />}
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={closeModal}
-                className="px-3 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all"
-              >
-                <Check className="w-3.5 h-3.5" />
-                <span>{modalState.item ? 'Save Changes' : 'Schedule to Agenda'}</span>
-              </button>
-            </div>
-          </div>
         </form>
+
+        {/* PINNED MODAL FOOTER - NEVER GETS CUT OFF */}
+        <div className="px-5 py-3 border-t border-white/10 bg-slate-900/80 flex items-center justify-between shrink-0">
+          {modalState.item ? (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete</span>
+            </button>
+          ) : <div />}
+
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="px-3.5 py-1.5 rounded-lg text-xs text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="event-modal-form"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Check className="w-3.5 h-3.5" />
+              <span>{modalState.item ? 'Save Changes' : 'Schedule Item'}</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

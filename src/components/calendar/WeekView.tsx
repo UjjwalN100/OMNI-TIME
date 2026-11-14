@@ -206,12 +206,12 @@ export const WeekView: React.FC = () => {
                             item.completed ? 'opacity-60' : ''
                           }`}
                         >
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-start gap-1.5" title={item.title}>
                             <span 
-                              className="w-1.5 h-1.5 rounded-full shrink-0" 
+                              className="w-1.5 h-1.5 rounded-full shrink-0 mt-1" 
                               style={{ backgroundColor: item.color }} 
                             />
-                            <div className={`text-[11px] font-semibold text-white truncate leading-tight group-hover:text-indigo-200 ${
+                            <div className={`text-[11px] font-semibold text-white line-clamp-2 leading-tight group-hover:text-indigo-200 ${
                               item.completed ? 'line-through text-slate-400' : ''
                             }`}>
                               {item.title}

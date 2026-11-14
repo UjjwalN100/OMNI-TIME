@@ -160,28 +160,28 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/* Middle section: Global Search & Quick Actions */}
-      <div className="flex items-center gap-3">
+      <div className="hidden md:flex items-center gap-2 max-w-xs justify-center">
         <button
           onClick={() => setIsCommandPaletteOpen(true)}
-          className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/5 text-slate-400 hover:text-slate-200 text-xs transition-colors w-60"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/5 text-slate-400 hover:text-slate-200 text-xs transition-colors w-44 lg:w-56"
         >
-          <Search className="w-3.5 h-3.5 text-slate-400" />
-          <span className="flex-1 text-left">Search events, spaces, docs...</span>
-          <kbd className="px-1.5 py-0.5 text-[10px] bg-white/10 rounded text-slate-300 font-mono">Ctrl K</kbd>
+          <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <span className="flex-1 text-left truncate">Search events, docs...</span>
+          <kbd className="px-1.5 py-0.5 text-[10px] bg-white/10 rounded text-slate-300 font-mono shrink-0">Ctrl K</kbd>
         </button>
       </div>
 
       {/* Right section: View Switcher, New Event & Right Toggle */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 shrink-0">
         {/* View Mode Pills */}
-        <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg border border-white/5">
+        <div className="flex items-center bg-white/[0.04] p-0.5 rounded-lg border border-white/5 shrink-0">
           {(['day', 'week', 'month'] as const).map(mode => (
             <button
               key={mode}
               onClick={() => setViewMode(mode)}
-              className={`px-3 py-1 text-xs font-medium rounded-md capitalize transition-all ${
+              className={`px-2.5 py-1 text-xs font-medium rounded-md capitalize transition-all ${
                 viewMode === mode
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-indigo-600 text-white shadow-sm font-semibold'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -193,23 +193,26 @@ export const Navbar: React.FC = () => {
         {/* Create Event / Task Button */}
         <button
           onClick={() => openNewModal()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium shadow-sm shadow-indigo-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium shadow-sm shadow-indigo-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>New</span>
-          <kbd className="ml-1 text-[10px] text-indigo-200/70 font-mono">C</kbd>
+          <kbd className="ml-0.5 text-[10px] text-indigo-200/70 font-mono">C</kbd>
         </button>
 
         {/* User Authentication Pill / Avatar */}
         {user ? (
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setIsUserMenuOpen(prev => !prev)}
-              className="flex items-center gap-2 p-1 pr-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/5 transition"
+              className="flex items-center gap-1.5 p-1 pr-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 transition shadow-sm"
             >
               <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
                 {user.email ? user.email.charAt(0).toUpperCase() : 'U'}
               </div>
+              <span className="text-xs text-indigo-200 font-medium max-w-[90px] truncate hidden sm:inline">
+                {user.email?.split('@')[0]}
+              </span>
               <ChevronDown className="w-3 h-3 text-slate-400" />
             </button>
 
@@ -238,9 +241,9 @@ export const Navbar: React.FC = () => {
         ) : (
           <button
             onClick={() => setIsAuthModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-medium transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0"
           >
-            <User className="w-3.5 h-3.5 text-blue-400" />
+            <User className="w-3.5 h-3.5" />
             <span>Sign In</span>
           </button>
         )}

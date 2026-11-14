@@ -248,27 +248,27 @@ export const RightPanel: React.FC = () => {
             <button
               type="button"
               onClick={() => setItemType('event')}
-              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 itemType === 'event'
                   ? 'bg-blue-600/30 text-blue-200 border border-blue-500/50 shadow-sm shadow-blue-500/20'
                   : 'bg-white/[0.03] text-slate-400 hover:text-slate-300 hover:bg-white/[0.06] border border-transparent'
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-[#3b82f6]" />
-              <span>Event (Blue)</span>
+              <span>Event</span>
             </button>
 
             <button
               type="button"
               onClick={() => setItemType('task')}
-              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              className={`flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 itemType === 'task'
                   ? 'bg-emerald-600/30 text-emerald-200 border border-emerald-500/50 shadow-sm shadow-emerald-500/20'
                   : 'bg-white/[0.03] text-slate-400 hover:text-slate-300 hover:bg-white/[0.06] border border-transparent'
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-[#10b981]" />
-              <span>Task (Green)</span>
+              <span>Task</span>
             </button>
           </div>
 

@@ -23,6 +23,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { OmniModule } from '../../types';
+import { NotificationPopover } from './NotificationPopover';
 
 export const Navbar: React.FC = () => {
   const { 
@@ -199,6 +200,9 @@ export const Navbar: React.FC = () => {
           <span>New</span>
           <kbd className="ml-0.5 text-[10px] text-indigo-200/70 font-mono">C</kbd>
         </button>
+
+        {/* Notifications Popover */}
+        <NotificationPopover />
 
         {/* User Authentication Pill / Avatar */}
         {user ? (

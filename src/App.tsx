@@ -1,6 +1,7 @@
 import React from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { OmniProvider } from './context/OmniContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { RightPanel } from './components/layout/RightPanel';
@@ -8,6 +9,7 @@ import { CalendarView } from './components/calendar/CalendarView';
 import { EventModal } from './components/modal/EventModal';
 import { CommandPalette } from './components/modal/CommandPalette';
 import { AuthModal } from './components/modal/AuthModal';
+import { ReminderWatcher } from './components/common/ReminderWatcher';
 
 function AppContent() {
   return (
@@ -21,6 +23,7 @@ function AppContent() {
       <EventModal />
       <CommandPalette />
       <AuthModal />
+      <ReminderWatcher />
     </div>
   );
 }
@@ -29,7 +32,9 @@ export default function App() {
   return (
     <AuthProvider>
       <OmniProvider>
-        <AppContent />
+        <NotificationProvider>
+          <AppContent />
+        </NotificationProvider>
       </OmniProvider>
     </AuthProvider>
   );

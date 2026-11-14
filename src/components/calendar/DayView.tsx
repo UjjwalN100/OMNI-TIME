@@ -147,24 +147,24 @@ export const DayView: React.FC = () => {
                     />
                     <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold uppercase tracking-wider ${
                       isTask 
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
-                        : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                        ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30' 
+                        : 'bg-blue-100 dark:bg-blue-500/20 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-500/30'
                     }`}>
                       {item.type}
                     </span>
-                    <h4 className={`text-xs font-semibold text-white truncate ${
+                    <h4 className={`text-xs font-bold text-slate-900 dark:text-white truncate ${
                       item.completed ? 'line-through text-slate-400' : ''
                     }`}>
                       {item.title}
                     </h4>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-300 shrink-0">
+                  <span className="text-[10px] font-mono text-slate-700 dark:text-slate-300 shrink-0">
                     {format(parseISO(item.startTime), 'h:mm a')} – {format(parseISO(item.endTime), 'h:mm a')}
                   </span>
                 </div>
 
                 {item.description && (
-                  <p className="text-[11px] text-slate-300 mt-1 line-clamp-1 leading-snug">
+                  <p className="text-[11px] text-slate-700 dark:text-slate-300 mt-1 line-clamp-1 leading-snug">
                     {item.description}
                   </p>
                 )}

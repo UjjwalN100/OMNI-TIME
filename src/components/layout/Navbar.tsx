@@ -142,8 +142,8 @@ export const Navbar: React.FC = () => {
           </div>
         ) : isGuest ? (
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-medium">
-              <Lock className="w-3 h-3 text-amber-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-500/10 border border-amber-400 dark:border-amber-500/25 text-amber-900 dark:text-amber-300 text-[11px] font-bold shadow-sm">
+              <Lock className="w-3 h-3 text-amber-700 dark:text-amber-400 shrink-0" />
               <span>Guest</span>
             </span>
             <button
@@ -352,7 +352,7 @@ export const Navbar: React.FC = () => {
                       {isActive ? (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/30 text-purple-300 dark:text-purple-300 light:text-purple-700 font-semibold">Active</span>
                       ) : isGuest ? (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-medium flex items-center gap-1 border border-amber-500/20">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-500/10 text-amber-900 dark:text-amber-400 font-bold flex items-center gap-1 border border-amber-400 dark:border-amber-500/20">
                           <Lock className="w-2.5 h-2.5" /> Locked
                         </span>
                       ) : (

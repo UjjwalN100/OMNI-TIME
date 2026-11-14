@@ -16,7 +16,7 @@
   --card-bg: #171A2B;
   --text-main: #F5F6FA;
   --text-muted: #8B91A7;
-  --border-line: rgba(139, 145, 167, 0.16);
+  --border-line: rgba(139, 145, 167, 0.20);
   --glass-bg: rgba(23, 26, 43, 0.88);
   --header-bg: rgba(23, 26, 43, 0.90);
   --slot-hover: rgba(120, 103, 216, 0.08);
@@ -24,16 +24,17 @@
 
 html.light, html:not(.dark) {
   color-scheme: light;
-  --canvas-bg: #F5F6FA;
-  --surface-bg: #FFFFFF;
-  --surface-subtle: #EEF1F7;
+  --canvas-bg: #FFFFFF;
+  --surface-bg: #F1F4F9;
+  --surface-subtle: #E2E8F0;
   --card-bg: #FFFFFF;
   --text-main: #171A2B;
-  --text-muted: #555D77;
-  --border-line: rgba(23, 26, 43, 0.14);
+  --text-muted: #4B526B;
+  --border-line: #94A3B8;
+  --grid-line: #CBD5E1;
   --glass-bg: #FFFFFF;
-  --header-bg: rgba(255, 255, 255, 0.96);
-  --slot-hover: rgba(120, 103, 216, 0.06);
+  --header-bg: #FFFFFF;
+  --slot-hover: rgba(120, 103, 216, 0.08);
 }
 
 body {
@@ -58,12 +59,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 145, 167, 0.25);
+  background: rgba(139, 145, 167, 0.35);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 145, 167, 0.45);
+  background: rgba(139, 145, 167, 0.55);
 }
 
 /* Smooth glass effect using CSS variables */
@@ -92,11 +93,10 @@ html.light .timeline-grid-dots {
 }
 
 /* ========================================================
-   LIGHT MODE CONTRAST OVERRIDES
-   Ensures text, surfaces, and borders are razor-sharp in light mode!
+   LIGHT MODE CONTRAST & STRUCTURAL BORDERS
    ======================================================== */
 html.light body, html:not(.dark) body {
-  background-color: #F5F6FA;
+  background-color: #FFFFFF;
   color: #171A2B;
 }
 
@@ -117,7 +117,7 @@ html:not(.dark) .text-slate-300 {
 
 html.light .text-slate-400,
 html:not(.dark) .text-slate-400 {
-  color: #555D77;
+  color: #4B526B;
 }
 
 html.light .text-slate-500,
@@ -125,16 +125,71 @@ html:not(.dark) .text-slate-500 {
   color: #6E7692;
 }
 
-/* Background surface overrides for light mode */
+/* 1. CRISP VISIBLE BORDERS IN LIGHT MODE (SOLID SLATE-400 & SLATE-300) */
+html.light .border-r,
+html:not(.dark) .border-r {
+  border-right-color: #94A3B8 !important;
+}
+
+html.light .border-l,
+html:not(.dark) .border-l {
+  border-left-color: #94A3B8 !important;
+}
+
+html.light .border-b,
+html:not(.dark) .border-b {
+  border-bottom-color: #CBD5E1 !important;
+}
+
+html.light .border-t,
+html:not(.dark) .border-t {
+  border-top-color: #CBD5E1 !important;
+}
+
+html.light .border,
+html:not(.dark) .border {
+  border-color: #CBD5E1 !important;
+}
+
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/\[0\.04\],
+html.light .border-white\/20,
+html:not(.dark) .border-white\/5,
+html:not(.dark) .border-white\/10,
+html:not(.dark) .border-white\/\[0\.04\],
+html:not(.dark) .border-white\/20 {
+  border-color: #CBD5E1 !important;
+}
+
+/* Calendar column and row lines: solid, distinct, unmistakable */
+html.light .divide-x > :not([hidden]) ~ :not([hidden]),
+html:not(.dark) .divide-x > :not([hidden]) ~ :not([hidden]) {
+  border-left-color: #CBD5E1 !important;
+}
+
+html.light .divide-y > :not([hidden]) ~ :not([hidden]),
+html:not(.dark) .divide-y > :not([hidden]) ~ :not([hidden]) {
+  border-top-color: #CBD5E1 !important;
+}
+
+/* 2. DISTINCT SURFACES & PANELS IN LIGHT MODE */
+html.light aside,
+html:not(.dark) aside {
+  background-color: #F1F4F9 !important;
+  border-color: #94A3B8 !important;
+}
+
+html.light header,
+html:not(.dark) header {
+  background-color: #FFFFFF !important;
+  border-bottom-color: #94A3B8 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
 html.light .bg-\[\#171A2B\],
-html.light .bg-\[\#0b101b\],
-html.light .bg-\[\#090d16\],
-html.light .bg-\[\#070a12\],
-html:not(.dark) .bg-\[\#171A2B\],
-html:not(.dark) .bg-\[\#0b101b\],
-html:not(.dark) .bg-\[\#090d16\],
-html:not(.dark) .bg-\[\#070a12\] {
-  background-color: #F5F6FA;
+html:not(.dark) .bg-\[\#171A2B\] {
+  background-color: #FFFFFF !important;
 }
 
 html.light .bg-\[\#1E2238\],
@@ -143,7 +198,7 @@ html.light .bg-slate-950,
 html:not(.dark) .bg-\[\#1E2238\],
 html:not(.dark) .bg-slate-900,
 html:not(.dark) .bg-slate-950 {
-  background-color: #FFFFFF;
+  background-color: #FFFFFF !important;
 }
 
 html.light .bg-white\/\[0\.04\],
@@ -154,7 +209,7 @@ html:not(.dark) .bg-white\/\[0\.04\],
 html:not(.dark) .bg-white\/\[0\.03\],
 html:not(.dark) .bg-white\/\[0\.02\],
 html:not(.dark) .bg-white\/5 {
-  background-color: rgba(23, 26, 43, 0.05);
+  background-color: #FFFFFF !important;
 }
 
 html.light .bg-white\/\[0\.08\],
@@ -163,33 +218,67 @@ html.light .bg-white\/15,
 html:not(.dark) .bg-white\/\[0\.08\],
 html:not(.dark) .bg-white\/10,
 html:not(.dark) .bg-white\/15 {
-  background-color: rgba(23, 26, 43, 0.09);
+  background-color: #E2E8F0 !important;
 }
 
-html.light .border-white\/5,
-html.light .border-white\/10,
-html.light .border-white\/\[0\.04\],
-html:not(.dark) .border-white\/5,
-html:not(.dark) .border-white\/10,
-html:not(.dark) .border-white\/\[0\.04\] {
-  border-color: rgba(23, 26, 43, 0.12);
+/* 3. INPUT BOXES IN LIGHT MODE */
+html.light input,
+html.light textarea,
+html.light select,
+html:not(.dark) input,
+html:not(.dark) textarea,
+html:not(.dark) select {
+  background-color: #FFFFFF !important;
+  color: #171A2B !important;
+  border: 1px solid #94A3B8 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder,
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #64748B !important;
+}
+
+/* 4. BULLETPROOF HIGH-CONTRAST AMBER / YELLOW (LOCKED & GUEST) IN LIGHT MODE */
+html.light [class*="text-amber"],
+html:not(.dark) [class*="text-amber"] {
+  color: #92400E !important; /* Deep rich Amber-800 for maximum readability */
+  font-weight: 700 !important;
+}
+
+html.light [class*="bg-amber"],
+html:not(.dark) [class*="bg-amber"] {
+  background-color: #FEF3C7 !important; /* Warm solid Amber-100 container */
+}
+
+html.light [class*="border-amber"],
+html:not(.dark) [class*="border-amber"] {
+  border-color: #D97706 !important; /* Solid visible Amber-600 border */
+  border-width: 1px !important;
 }
 
 /* Glass panel in Light Mode */
 html.light .glass-panel,
 html:not(.dark) .glass-panel {
   background: #FFFFFF !important;
-  border: 1px solid rgba(23, 26, 43, 0.14) !important;
-  box-shadow: 0 16px 40px rgba(23, 26, 43, 0.12) !important;
+  border: 1px solid #94A3B8 !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+}
+
+html.light .glass-panel-subtle,
+html:not(.dark) .glass-panel-subtle {
+  background: #F8FAFC !important;
+  border: 1px solid #CBD5E1 !important;
 }
 
 html.light .glass-panel-subtle,
 html:not(.dark) .glass-panel-subtle {
   background: #F8F9FD !important;
-  border: 1px solid rgba(23, 26, 43, 0.10) !important;
+  border: 1px solid #CBD2E1 !important;
 }
 
-/* PRESERVE WHITE TEXT ON PRIMARY ACCENT BUTTONS & BADGES */
+/* 5. PRESERVE WHITE TEXT ON FILLED PRIMARY ACCENT BUTTONS */
 html.light .bg-purple-600,
 html.light .bg-purple-600 *,
 html.light button.bg-purple-600,
@@ -212,15 +301,16 @@ html:not(.dark) .bg-emerald-600 * {
 /* Accent text contrast in Light Mode */
 html.light .text-purple-400,
 html:not(.dark) .text-purple-400 {
-  color: #6855CB;
+  color: #6855CB !important;
+  font-weight: 600;
 }
 
 html.light .text-purple-300,
 html:not(.dark) .text-purple-300 {
-  color: #5843BE;
+  color: #5843BE !important;
 }
 
 html.light .text-purple-200,
 html:not(.dark) .text-purple-200 {
-  color: #46339E;
+  color: #46339E !important;
 }

@@ -211,17 +211,19 @@ export const WeekView: React.FC = () => {
                               className="w-1.5 h-1.5 rounded-full shrink-0 mt-1" 
                               style={{ backgroundColor: item.color }} 
                             />
-                            <div className={`text-[11px] font-semibold text-white line-clamp-2 leading-tight group-hover:text-purple-200 ${
+                            <div className={`text-[11px] font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight group-hover:text-purple-700 dark:group-hover:text-purple-200 ${
                               item.completed ? 'line-through text-slate-400' : ''
                             }`}>
                               {item.title}
                             </div>
                           </div>
                           
-                          <div className="flex items-center justify-between text-[9px] font-mono text-slate-300 mt-1 truncate">
+                          <div className="flex items-center justify-between text-[9px] font-mono text-slate-700 dark:text-slate-300 mt-1 truncate">
                             <span>{format(parseISO(item.startTime), 'h:mm a')}</span>
                             <span className={`text-[8px] px-1 rounded uppercase font-bold ${
-                              isTask ? 'text-emerald-300 bg-emerald-500/20' : 'text-blue-300 bg-blue-500/20'
+                              isTask 
+                                ? 'text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-transparent' 
+                                : 'text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-blue-500/20 border border-blue-300 dark:border-transparent'
                             }`}>
                               {item.type}
                             </span>

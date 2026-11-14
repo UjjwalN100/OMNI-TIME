@@ -68,7 +68,7 @@ export const NotificationPopover: React.FC<{ variant?: 'navbar' | 'menu' }> = ({
 
         <div className="flex items-center gap-2">
           {isGuest ? (
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-500/10 text-amber-900 dark:text-amber-400 border border-amber-400 dark:border-amber-500/20 font-bold">
               Locked
             </span>
           ) : unreadCount > 0 ? (
@@ -76,7 +76,7 @@ export const NotificationPopover: React.FC<{ variant?: 'navbar' | 'menu' }> = ({
               {unreadCount}
             </span>
           ) : (
-            <span className="text-[10px] text-[var(--text-muted)]">
+            <span className="text-[10px] text-[var(--text-muted)] font-medium">
               {soundEnabled ? 'Chimes On' : 'Muted'}
             </span>
           )}
@@ -91,16 +91,16 @@ export const NotificationPopover: React.FC<{ variant?: 'navbar' | 'menu' }> = ({
           {isGuest ? (
             <div 
               onClick={() => setIsAuthModalOpen(true)}
-              className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-center cursor-pointer hover:bg-amber-500/15 transition"
+              className="p-3 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/20 text-center cursor-pointer hover:bg-amber-100/70 dark:hover:bg-amber-500/15 transition shadow-xs"
             >
-              <div className="flex items-center justify-center gap-1.5 text-amber-400 font-bold text-xs mb-1">
-                <Lock className="w-3.5 h-3.5" />
+              <div className="flex items-center justify-center gap-1.5 text-amber-950 dark:text-amber-400 font-bold text-xs mb-1">
+                <Lock className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                 <span>Notifications Locked for Guests</span>
               </div>
-              <p className="text-[11px] text-slate-400 mb-2 leading-relaxed">
+              <p className="text-[11px] text-amber-900/80 dark:text-slate-400 mb-2 leading-relaxed font-medium">
                 Reminder chimes and 10-minute alerts require a Google account.
               </p>
-              <span className="inline-block px-3 py-1 bg-purple-600 text-white rounded-lg text-[11px] font-semibold">
+              <span className="inline-block px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-[11px] font-bold shadow-xs">
                 Sign In to Unlock
               </span>
             </div>

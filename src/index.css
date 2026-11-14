@@ -29,10 +29,10 @@ html.light, html:not(.dark) {
   --surface-subtle: #EEF1F7;
   --card-bg: #FFFFFF;
   --text-main: #171A2B;
-  --text-muted: #646B84;
-  --border-line: rgba(139, 145, 167, 0.22);
-  --glass-bg: rgba(255, 255, 255, 0.96);
-  --header-bg: rgba(255, 255, 255, 0.92);
+  --text-muted: #555D77;
+  --border-line: rgba(23, 26, 43, 0.14);
+  --glass-bg: #FFFFFF;
+  --header-bg: rgba(255, 255, 255, 0.96);
   --slot-hover: rgba(120, 103, 216, 0.06);
 }
 
@@ -88,5 +88,139 @@ body {
 }
 
 html.light .timeline-grid-dots {
-  background-image: radial-gradient(rgba(139, 145, 167, 0.25) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(23, 26, 43, 0.12) 1px, transparent 1px);
+}
+
+/* ========================================================
+   LIGHT MODE CONTRAST OVERRIDES
+   Ensures text, surfaces, and borders are razor-sharp in light mode!
+   ======================================================== */
+html.light body, html:not(.dark) body {
+  background-color: #F5F6FA;
+  color: #171A2B;
+}
+
+/* Text color inversions for light mode */
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-white,
+html:not(.dark) .text-slate-100,
+html:not(.dark) .text-slate-200,
+html:not(.dark) .text-white {
+  color: #171A2B;
+}
+
+html.light .text-slate-300,
+html:not(.dark) .text-slate-300 {
+  color: #2F364E;
+}
+
+html.light .text-slate-400,
+html:not(.dark) .text-slate-400 {
+  color: #555D77;
+}
+
+html.light .text-slate-500,
+html:not(.dark) .text-slate-500 {
+  color: #6E7692;
+}
+
+/* Background surface overrides for light mode */
+html.light .bg-\[\#171A2B\],
+html.light .bg-\[\#0b101b\],
+html.light .bg-\[\#090d16\],
+html.light .bg-\[\#070a12\],
+html:not(.dark) .bg-\[\#171A2B\],
+html:not(.dark) .bg-\[\#0b101b\],
+html:not(.dark) .bg-\[\#090d16\],
+html:not(.dark) .bg-\[\#070a12\] {
+  background-color: #F5F6FA;
+}
+
+html.light .bg-\[\#1E2238\],
+html.light .bg-slate-900,
+html.light .bg-slate-950,
+html:not(.dark) .bg-\[\#1E2238\],
+html:not(.dark) .bg-slate-900,
+html:not(.dark) .bg-slate-950 {
+  background-color: #FFFFFF;
+}
+
+html.light .bg-white\/\[0\.04\],
+html.light .bg-white\/\[0\.03\],
+html.light .bg-white\/\[0\.02\],
+html.light .bg-white\/5,
+html:not(.dark) .bg-white\/\[0\.04\],
+html:not(.dark) .bg-white\/\[0\.03\],
+html:not(.dark) .bg-white\/\[0\.02\],
+html:not(.dark) .bg-white\/5 {
+  background-color: rgba(23, 26, 43, 0.05);
+}
+
+html.light .bg-white\/\[0\.08\],
+html.light .bg-white\/10,
+html.light .bg-white\/15,
+html:not(.dark) .bg-white\/\[0\.08\],
+html:not(.dark) .bg-white\/10,
+html:not(.dark) .bg-white\/15 {
+  background-color: rgba(23, 26, 43, 0.09);
+}
+
+html.light .border-white\/5,
+html.light .border-white\/10,
+html.light .border-white\/\[0\.04\],
+html:not(.dark) .border-white\/5,
+html:not(.dark) .border-white\/10,
+html:not(.dark) .border-white\/\[0\.04\] {
+  border-color: rgba(23, 26, 43, 0.12);
+}
+
+/* Glass panel in Light Mode */
+html.light .glass-panel,
+html:not(.dark) .glass-panel {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(23, 26, 43, 0.14) !important;
+  box-shadow: 0 16px 40px rgba(23, 26, 43, 0.12) !important;
+}
+
+html.light .glass-panel-subtle,
+html:not(.dark) .glass-panel-subtle {
+  background: #F8F9FD !important;
+  border: 1px solid rgba(23, 26, 43, 0.10) !important;
+}
+
+/* PRESERVE WHITE TEXT ON PRIMARY ACCENT BUTTONS & BADGES */
+html.light .bg-purple-600,
+html.light .bg-purple-600 *,
+html.light button.bg-purple-600,
+html.light button.bg-purple-600 *,
+html.light .bg-blue-600,
+html.light .bg-blue-600 *,
+html.light .bg-emerald-600,
+html.light .bg-emerald-600 *,
+html:not(.dark) .bg-purple-600,
+html:not(.dark) .bg-purple-600 *,
+html:not(.dark) button.bg-purple-600,
+html:not(.dark) button.bg-purple-600 *,
+html:not(.dark) .bg-blue-600,
+html:not(.dark) .bg-blue-600 *,
+html:not(.dark) .bg-emerald-600,
+html:not(.dark) .bg-emerald-600 * {
+  color: #FFFFFF !important;
+}
+
+/* Accent text contrast in Light Mode */
+html.light .text-purple-400,
+html:not(.dark) .text-purple-400 {
+  color: #6855CB;
+}
+
+html.light .text-purple-300,
+html:not(.dark) .text-purple-300 {
+  color: #5843BE;
+}
+
+html.light .text-purple-200,
+html:not(.dark) .text-purple-200 {
+  color: #46339E;
 }

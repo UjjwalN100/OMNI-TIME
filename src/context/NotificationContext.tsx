@@ -156,7 +156,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setAlerts([]);
   };
 
-  // Periodic Reminder Checker
+  // Periodic Reminder Checker (3 Days Before, 10 Mins Before, and Start Time)
   const checkReminders = useCallback((items: OmniAgendaItem[]) => {
     const now = new Date().getTime();
 
@@ -165,10 +165,36 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const startTime = parseISO(item.startTime).getTime();
         const diffMinutes = Math.round((startTime - now) / (60 * 1000));
 
+        const key3d = `${item.id}-3d`;
         const key10m = `${item.id}-10m`;
         const keyStart = `${item.id}-start`;
 
-        // 10-Minute Pre-Alert (between 7 and 10 minutes)
+        // 1. 3-Day Advance Reminder (triggers between 48 hours and 72 hours before start)
+        if (diffMinutes <= 3 * 24 * 60 && diffMinutes > 2 * 24 * 60) {
+          if (!notifiedRemindersRef.current.has(key3d)) {
+            notifiedRemindersRef.current.add(key3d);
+            saveNotifiedSet();
+
+            const isTask = item.type === 'task';
+            const alertTitle = isTask 
+              ? `⏰ Task Due in 3 Days: ${item.title}` 
+              : `📅 Upcoming in 3 Days: ${item.title}`;
+            const alertBody = `Scheduled for ${format(parseISO(item.startTime), 'EEE, MMM d')} at ${format(parseISO(item.startTime), 'h:mm a')}.`;
+
+            if (soundEnabled) playNotificationChime();
+            triggerDesktopNotification(alertTitle, alertBody, key3d);
+
+            addAlert({
+              itemId: item.id,
+              title: alertTitle,
+              message: alertBody,
+              time: format(new Date(), 'h:mm a'),
+              type: item.type
+            });
+          }
+        }
+
+        // 2. 10-Minute Pre-Alert (between 7 and 10 minutes)
         if (diffMinutes >= 7 && diffMinutes <= 10) {
           if (!notifiedRemindersRef.current.has(key10m)) {
             notifiedRemindersRef.current.add(key10m);
@@ -191,7 +217,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
           }
         }
 
-        // Start Time Alert (between -1 and 2 minutes)
+        // 3. Start Time Alert (between -1 and 2 minutes)
         if (diffMinutes >= -1 && diffMinutes <= 2) {
           if (!notifiedRemindersRef.current.has(keyStart)) {
             notifiedRemindersRef.current.add(keyStart);

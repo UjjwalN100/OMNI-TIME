@@ -98,7 +98,7 @@ export const NotificationPopover: React.FC<{ variant?: 'navbar' | 'menu' }> = ({
                 <span>Notifications Locked for Guests</span>
               </div>
               <p className="text-[11px] text-amber-900/80 dark:text-slate-400 mb-2 leading-relaxed font-medium">
-                Reminder chimes and 10-minute alerts require a Google account.
+                3-day advance reminders, 10-minute chimes, and deadline alerts require a Google account.
               </p>
               <span className="inline-block px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-[11px] font-bold shadow-xs">
                 Sign In to Unlock
@@ -158,6 +158,12 @@ export const NotificationPopover: React.FC<{ variant?: 'navbar' | 'menu' }> = ({
                       <span>Install PWA</span>
                     </button>
                   )}
+                </div>
+
+                {/* Reminder Timing Cadence */}
+                <div className="px-2.5 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20 text-[10px] text-purple-700 dark:text-purple-300 flex items-center justify-between font-medium">
+                  <span>Alert Schedule:</span>
+                  <span className="font-bold">3 Days Before • 10m • Start</span>
                 </div>
               </div>
 

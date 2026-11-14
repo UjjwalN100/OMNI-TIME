@@ -134,9 +134,9 @@ export const RightPanel: React.FC = () => {
   };
 
   return (
-    <aside className="w-80 border-l border-white/5 bg-[#171A2B] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto">
+    <aside className="w-80 border-l border-[var(--border-line)] bg-[var(--surface-bg)] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto transition-colors">
       {/* Header */}
-      <div className="p-4 border-b border-white/5 bg-gradient-to-b from-slate-900/40 to-transparent">
+      <div className="p-4 border-b border-[var(--border-line)] bg-gradient-to-b from-slate-900/10 to-transparent">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-purple-400" />

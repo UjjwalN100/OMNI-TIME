@@ -89,12 +89,12 @@ export const WeekView: React.FC = () => {
   const currentTimeTop = currentMinutes; // exactly 1px per minute
 
   return (
-    <div className="flex-1 flex flex-col h-full select-none bg-[#171A2B] overflow-hidden">
+    <div className="flex-1 flex flex-col h-full select-none bg-[var(--canvas-bg)] overflow-hidden transition-colors">
       {/* Sticky Day Column Headers */}
-      <div className="flex border-b border-white/5 bg-[#1E2238]/95 backdrop-blur-md z-30 shrink-0">
+      <div className="flex border-b border-[var(--border-line)] bg-[var(--surface-bg)]/95 backdrop-blur-md z-30 shrink-0">
         {/* Exact width matching time column: w-20 */}
-        <div className="w-20 shrink-0 border-r border-white/5" />
-        <div className="flex-1 grid grid-cols-7 divide-x divide-white/5">
+        <div className="w-20 shrink-0 border-r border-[var(--border-line)]" />
+        <div className="flex-1 grid grid-cols-7 divide-x divide-[var(--border-line)]">
           {weekDays.map((day, idx) => {
             const isCurrent = isToday(day);
             const isSelected = isSameDay(day, currentDate);
@@ -136,17 +136,17 @@ export const WeekView: React.FC = () => {
             return (
               <div 
                 key={hour} 
-                className="flex h-[60px] border-b border-white/[0.04] relative group/row"
+                className="flex h-[60px] border-b border-[var(--border-line)] relative group/row"
               >
                 {/* Time Label Column: Exactly positioned without any cumulative drift */}
-                <div className="w-20 shrink-0 border-r border-white/5 pr-3 text-right select-none relative">
+                <div className="w-20 shrink-0 border-r border-[var(--border-line)] pr-3 text-right select-none relative">
                   <span className="absolute top-0 right-3 -translate-y-1/2 text-[10px] font-mono text-slate-400 group-hover/row:text-slate-200 transition-colors">
                     {displayLabel}
                   </span>
                 </div>
 
                 {/* 7 Day Slot Boxes for THIS Exact Hour */}
-                <div className="flex-1 grid grid-cols-7 divide-x divide-white/5">
+                <div className="flex-1 grid grid-cols-7 divide-x divide-[var(--border-line)]">
                   {weekDays.map((day, colIdx) => (
                     <div
                       key={colIdx}

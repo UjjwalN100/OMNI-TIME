@@ -78,15 +78,15 @@ export const DayView: React.FC = () => {
   const currentTimeTop = (currentMinutes / 60) * 64;
 
   return (
-    <div ref={containerRef} className="flex-1 overflow-y-auto h-full relative select-none bg-[#171A2B] pb-24">
+    <div ref={containerRef} className="flex-1 overflow-y-auto h-full relative select-none bg-[var(--canvas-bg)] pb-24 transition-colors">
       <div className="relative min-w-[600px]">
         {/* Pixel-Perfect Rows: Each hour row contains both the label and the slot box */}
         {HOURS.map(hour => {
           const displayLabel = formatHourLabel(hour);
           return (
-            <div key={hour} className="flex h-16 border-b border-white/[0.04] relative group/row">
+            <div key={hour} className="flex h-16 border-b border-[var(--border-line)] relative group/row">
               {/* Hour Label: Exactly centered on the horizontal dividing line with -translate-y-1/2 */}
-              <div className="w-24 shrink-0 border-r border-white/5 pr-4 text-right select-none relative">
+              <div className="w-24 shrink-0 border-r border-[var(--border-line)] pr-4 text-right select-none relative">
                 <span className="absolute top-0 right-4 -translate-y-1/2 text-[11px] font-mono text-slate-400 group-hover/row:text-slate-200 transition-colors">
                   {displayLabel}
                 </span>

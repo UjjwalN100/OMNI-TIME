@@ -8,16 +8,43 @@
   --omni-white: #F5F6FA;
   --omni-slate: #8B91A7;
   --omni-purple: #7867D8;
+
+  /* Theme tokens: Dark by default */
+  --canvas-bg: #171A2B;
+  --surface-bg: #1E2238;
+  --surface-subtle: #242944;
+  --card-bg: #171A2B;
+  --text-main: #F5F6FA;
+  --text-muted: #8B91A7;
+  --border-line: rgba(139, 145, 167, 0.16);
+  --glass-bg: rgba(23, 26, 43, 0.88);
+  --header-bg: rgba(23, 26, 43, 0.90);
+  --slot-hover: rgba(120, 103, 216, 0.08);
+}
+
+html.light, html:not(.dark) {
+  color-scheme: light;
+  --canvas-bg: #F5F6FA;
+  --surface-bg: #FFFFFF;
+  --surface-subtle: #EEF1F7;
+  --card-bg: #FFFFFF;
+  --text-main: #171A2B;
+  --text-muted: #646B84;
+  --border-line: rgba(139, 145, 167, 0.22);
+  --glass-bg: rgba(255, 255, 255, 0.96);
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --slot-hover: rgba(120, 103, 216, 0.06);
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #171A2B;
-  color: #F5F6FA;
+  background-color: var(--canvas-bg);
+  color: var(--text-main);
   overflow: hidden;
   user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom sleek scrollbar for desktop productivity */
@@ -39,22 +66,27 @@ body {
   background: rgba(139, 145, 167, 0.45);
 }
 
-/* Smooth glass effect using Midnight Navy base */
+/* Smooth glass effect using CSS variables */
 .glass-panel {
-  background: rgba(23, 26, 43, 0.88);
+  background: var(--glass-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(139, 145, 167, 0.16);
+  border: 1px solid var(--border-line);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
 
 .glass-panel-subtle {
-  background: rgba(30, 34, 56, 0.65);
+  background: var(--surface-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(139, 145, 167, 0.12);
+  border: 1px solid var(--border-line);
 }
 
 /* Timeline grid dot background */
 .timeline-grid-dots {
   background-image: radial-gradient(rgba(139, 145, 167, 0.18) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+html.light .timeline-grid-dots {
+  background-image: radial-gradient(rgba(139, 145, 167, 0.25) 1px, transparent 1px);
 }

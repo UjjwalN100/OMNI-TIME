@@ -12,12 +12,16 @@ import {
   ShieldCheck, 
   Lock,
   Mail,
-  Loader2
+  Loader2,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useOmni } from '../../context/OmniContext';
 
 export const WelcomeGateway: React.FC = () => {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail, continueAsGuest } = useAuth();
+  const { theme, toggleTheme } = useOmni();
   const [loading, setLoading] = useState(false);
   const [showEmailAuth, setShowEmailAuth] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -50,7 +54,7 @@ export const WelcomeGateway: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-[#171A2B] text-slate-100 flex flex-col justify-between p-4 sm:p-6 md:p-8 relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen w-screen bg-[var(--canvas-bg)] text-[var(--text-main)] flex flex-col justify-between p-4 sm:p-6 md:p-8 relative overflow-x-hidden selection:bg-purple-500 selection:text-white transition-colors">
       {/* Ambient background glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-tr from-purple-600/15 via-indigo-600/10 to-purple-400/10 blur-[120px] pointer-events-none rounded-full" />
       
@@ -62,12 +66,22 @@ export const WelcomeGateway: React.FC = () => {
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="font-bold text-sm tracking-widest text-purple-400 uppercase">OMNI</span>
-            <span className="font-semibold text-base text-slate-100">Time</span>
+            <span className="font-semibold text-base text-[var(--text-main)]">Time</span>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-xs text-slate-400">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Productivity Ecosystem</span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-[var(--border-line)] text-xs text-[var(--text-muted)] hover:text-[var(--text-main)] transition"
+            title="Switch between Light and Dark mode"
+          >
+            {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-purple-400" />}
+            <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
+          </button>
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.04] border border-[var(--border-line)] text-xs text-[var(--text-muted)]">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Productivity Ecosystem</span>
+          </div>
         </div>
       </header>
 

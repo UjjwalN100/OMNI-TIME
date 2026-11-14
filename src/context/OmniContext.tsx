@@ -12,6 +12,8 @@ export interface ModalState {
 }
 
 interface OmniContextType {
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
   currentDate: Date;
   setCurrentDate: (date: Date) => void;
   viewMode: ViewMode;
@@ -55,6 +57,26 @@ const OmniContext = createContext<OmniContextType | undefined>(undefined);
 
 export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const saved = localStorage.getItem('omni_theme');
+    return (saved === 'light' || saved === 'dark') ? saved : 'dark';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('omni_theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  }, []);
+
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('week');
   
@@ -490,6 +512,8 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <OmniContext.Provider
       value={{
+        theme,
+        toggleTheme,
         currentDate,
         setCurrentDate,
         viewMode,

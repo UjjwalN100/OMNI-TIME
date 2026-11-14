@@ -51,9 +51,9 @@ export const MonthView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#171A2B] select-none overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-[var(--canvas-bg)] select-none overflow-hidden transition-colors">
       {/* Day Names Header */}
-      <div className="grid grid-cols-7 border-b border-white/5 bg-[#1E2238]/90 text-center py-2 shrink-0">
+      <div className="grid grid-cols-7 border-b border-[var(--border-line)] bg-[var(--surface-bg)]/90 text-center py-2 shrink-0">
         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(dayName => (
           <div key={dayName} className="text-xs font-semibold text-slate-400 tracking-wider uppercase">
             {dayName}
@@ -62,7 +62,7 @@ export const MonthView: React.FC = () => {
       </div>
 
       {/* Month Days Matrix */}
-      <div className="flex-1 grid grid-cols-7 grid-rows-5 divide-x divide-y divide-white/5 overflow-hidden">
+      <div className="flex-1 grid grid-cols-7 grid-rows-5 divide-x divide-y divide-[var(--border-line)] overflow-hidden">
         {daysMatrix.slice(0, 35).map((day, idx) => {
           const isCurrent = isToday(day);
           const isCurrentMonthDay = isSameMonth(day, currentDate);

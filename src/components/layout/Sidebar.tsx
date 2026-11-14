@@ -53,9 +53,9 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-64 border-r border-white/5 bg-[#171A2B] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto">
+    <aside className="w-64 border-r border-[var(--border-line)] bg-[var(--surface-bg)] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto transition-colors">
       {/* Mini Calendar Widget */}
-      <div className="p-4 border-b border-white/5">
+      <div className="p-4 border-b border-[var(--border-line)]">
         <div className="flex items-center justify-between mb-2">
           <div>
             <span className="text-xs font-semibold text-slate-200 block">

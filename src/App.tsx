@@ -35,7 +35,7 @@ function AppContent() {
   }
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#171A2B] text-slate-100 antialiased select-none">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[var(--canvas-bg)] text-[var(--text-main)] antialiased select-none transition-colors">
       <Navbar />
       <div className="flex-1 flex overflow-hidden relative">
         <Sidebar />

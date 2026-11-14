@@ -17,8 +17,10 @@ import {
   FileText, 
   FileSpreadsheet, 
   Calendar as CalendarIcon,
-  Keyboard
+  Keyboard,
+  Lock
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { EventCategory } from '../../types';
 
 export const Sidebar: React.FC = () => {
@@ -30,6 +32,8 @@ export const Sidebar: React.FC = () => {
     items,
     isSidebarOpen 
   } = useOmni();
+
+  const { isGuest, setIsAuthModalOpen } = useAuth();
 
   const [miniCalMonth, setMiniCalMonth] = useState<Date>(currentDate);
 
@@ -170,24 +174,46 @@ export const Sidebar: React.FC = () => {
               <Layers className="w-3 h-3 text-indigo-400" />
               <span>Linked Space Docs</span>
             </div>
+            {isGuest && (
+              <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 font-semibold border border-amber-500/20">
+                Locked
+              </span>
+            )}
           </div>
-          <div className="space-y-1.5">
-            <div className="group flex items-center justify-between p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 text-xs text-slate-300 transition-colors cursor-pointer">
-              <div className="flex items-center gap-2 truncate">
-                <FileText className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-                <span className="truncate">OMNI Ecosystem v1 Arch</span>
-              </div>
-              <span className="text-[9px] text-indigo-400/80 font-mono shrink-0">9:00 AM</span>
+          {isGuest ? (
+            <div 
+              onClick={() => setIsAuthModalOpen(true)}
+              className="p-2.5 rounded-xl bg-amber-500/[0.04] border border-amber-500/15 text-xs text-slate-400 cursor-pointer hover:bg-amber-500/[0.08] transition"
+            >
+              <p className="text-[11px] text-amber-200/90 leading-relaxed mb-1.5">
+                Connecting OMNI Space docs is locked for Guests.
+              </p>
+              <button
+                type="button"
+                className="text-[10px] text-indigo-300 hover:text-white underline font-semibold"
+              >
+                Sign in with Google to connect
+              </button>
             </div>
+          ) : (
+            <div className="space-y-1.5">
+              <div className="group flex items-center justify-between p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 text-xs text-slate-300 transition-colors cursor-pointer">
+                <div className="flex items-center gap-2 truncate">
+                  <FileText className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+                  <span className="truncate">OMNI Ecosystem v1 Arch</span>
+                </div>
+                <span className="text-[9px] text-indigo-400/80 font-mono shrink-0">9:00 AM</span>
+              </div>
 
-            <div className="group flex items-center justify-between p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 text-xs text-slate-300 transition-colors cursor-pointer">
-              <div className="flex items-center gap-2 truncate">
-                <FileSpreadsheet className="w-3.5 h-3.5 text-pink-400 shrink-0" />
-                <span className="truncate">Zero-Cost Cloud Topology</span>
+              <div className="group flex items-center justify-between p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 text-xs text-slate-300 transition-colors cursor-pointer">
+                <div className="flex items-center gap-2 truncate">
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-pink-400 shrink-0" />
+                  <span className="truncate">Zero-Cost Cloud Topology</span>
+                </div>
+                <span className="text-[9px] text-pink-400/80 font-mono shrink-0">3:00 PM</span>
               </div>
-              <span className="text-[9px] text-pink-400/80 font-mono shrink-0">3:00 PM</span>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

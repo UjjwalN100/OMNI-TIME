@@ -14,8 +14,10 @@ import {
   Image as ImageIcon,
   File,
   Upload,
-  Plus
+  Plus,
+  Lock
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { AgendaItemType, EventCategory, OmniAgendaItem, AttachedDoc } from '../../types';
 import { EVENT_BLUE, TASK_GREEN } from '../../data/mockData';
 
@@ -28,6 +30,8 @@ export const EventModal: React.FC = () => {
     deleteItem,
     categories 
   } = useOmni();
+
+  const { isGuest, setIsAuthModalOpen } = useAuth();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -383,27 +387,47 @@ export const EventModal: React.FC = () => {
                 <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
                 <span>Attached Files & Docs</span>
               </label>
-              <div className="flex items-center gap-1.5">
-                <input
-                  type="file"
-                  multiple
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
-                >
-                  <Upload className="w-3 h-3" />
-                  <span>Upload File</span>
-                </button>
-              </div>
+              {isGuest ? (
+                <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-medium">
+                  <Lock className="w-3 h-3 text-amber-400" />
+                  <span>Locked for Guests</span>
+                </span>
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="file"
+                    multiple
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
+                  >
+                    <Upload className="w-3 h-3" />
+                    <span>Upload File</span>
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* Attached List or Empty State */}
-            {attachments.length > 0 ? (
+            {/* Attached List or Empty State or Guest Lock */}
+            {isGuest ? (
+              <div 
+                onClick={() => {
+                  closeModal();
+                  setIsAuthModalOpen(true);
+                }}
+                className="p-3 rounded-xl bg-amber-500/[0.04] border border-amber-500/15 text-center text-slate-400 text-xs flex items-center justify-center gap-2 cursor-pointer hover:bg-amber-500/[0.08] transition"
+              >
+                <Lock className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-amber-200/90 text-[11px]">
+                  Document attachments require a Google account. <strong className="underline text-amber-300">Sign in to unlock</strong>
+                </span>
+              </div>
+            ) : attachments.length > 0 ? (
               <div className="space-y-1">
                 {attachments.map(att => (
                   <div

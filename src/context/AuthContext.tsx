@@ -6,6 +6,9 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  isGuest: boolean;
+  continueAsGuest: () => void;
+  exitGuestMode: () => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
@@ -20,6 +23,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState<boolean>(() => {
+    return localStorage.getItem('omni_is_guest') === 'true';
+  });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
@@ -27,6 +33,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        setIsGuest(false);
+        localStorage.removeItem('omni_is_guest');
+      }
       setLoading(false);
     }).catch(() => {
       setLoading(false);
@@ -36,16 +46,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
       if (session?.user) {
+        setIsGuest(false);
+        localStorage.removeItem('omni_is_guest');
         setIsAuthModalOpen(false);
       }
+      setLoading(false);
     });
 
     return () => {
       subscription.unsubscribe();
     };
   }, []);
+
+  const continueAsGuest = () => {
+    setIsGuest(true);
+    localStorage.setItem('omni_is_guest', 'true');
+    setIsAuthModalOpen(false);
+  };
+
+  const exitGuestMode = () => {
+    setIsGuest(false);
+    localStorage.removeItem('omni_is_guest');
+  };
 
   const signInWithGoogle = async () => {
     try {
@@ -90,6 +113,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setUser(null);
+    setSession(null);
+    setIsGuest(false);
+    localStorage.removeItem('omni_is_guest');
   };
 
   return (
@@ -98,6 +125,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         session,
         loading,
+        isGuest,
+        continueAsGuest,
+        exitGuestMode,
         isAuthModalOpen,
         setIsAuthModalOpen,
         signInWithGoogle,

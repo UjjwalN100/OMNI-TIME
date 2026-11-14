@@ -17,8 +17,10 @@ import {
   Plus,
   ChevronDown,
   ChevronUp,
-  X
+  X,
+  Lock
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { AgendaItemType, OmniAgendaItem, AttachedDoc } from '../../types';
 import { EVENT_BLUE, TASK_GREEN } from '../../data/mockData';
 
@@ -36,6 +38,8 @@ export const RightPanel: React.FC = () => {
     openEditModal,
     isRightPanelOpen 
   } = useOmni();
+
+  const { isGuest, setIsAuthModalOpen } = useAuth();
 
   const [title, setTitle] = useState('');
   const [itemType, setItemType] = useState<AgendaItemType>('event');
@@ -183,19 +187,44 @@ export const RightPanel: React.FC = () => {
             onChange={handleDateFileUpload}
             className="hidden"
           />
-          <button
-            type="button"
-            onClick={() => dayFileInputRef.current?.click()}
-            className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
-          >
-            <Upload className="w-3 h-3" />
-            <span>Attach File</span>
-          </button>
+          {isGuest ? (
+            <button
+              type="button"
+              onClick={() => setIsAuthModalOpen(true)}
+              className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/25 transition-colors font-medium"
+              title="Attaching files is locked in Guest mode. Sign in with Google to enable."
+            >
+              <Lock className="w-3 h-3 text-amber-400" />
+              <span>Locked</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => dayFileInputRef.current?.click()}
+              className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
+            >
+              <Upload className="w-3 h-3" />
+              <span>Attach File</span>
+            </button>
+          )}
         </div>
 
         {isDayDocsOpen && (
           <div className="mt-2.5 space-y-1.5">
-            {currentDayAttachments.length === 0 ? (
+            {isGuest ? (
+              <div 
+                onClick={() => setIsAuthModalOpen(true)}
+                className="p-2.5 rounded-xl bg-amber-500/[0.04] border border-amber-500/15 text-xs text-slate-400 cursor-pointer hover:bg-amber-500/[0.08] transition"
+              >
+                <div className="flex items-center gap-1.5 text-amber-300 font-semibold text-[11px] mb-0.5">
+                  <Lock className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Attachments Disabled for Guests</span>
+                </div>
+                <p className="text-[10px] text-slate-400 leading-relaxed">
+                  Sign in with Google to upload files and sync documents to your calendar.
+                </p>
+              </div>
+            ) : currentDayAttachments.length === 0 ? (
               <p className="text-[11px] text-slate-400 italic py-1">
                 No documents attached to this date yet. Click "Attach File" to add files for today.
               </p>

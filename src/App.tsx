@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { OmniProvider } from './context/OmniContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { Navbar } from './components/layout/Navbar';
@@ -10,8 +10,30 @@ import { EventModal } from './components/modal/EventModal';
 import { CommandPalette } from './components/modal/CommandPalette';
 import { AuthModal } from './components/modal/AuthModal';
 import { ReminderWatcher } from './components/common/ReminderWatcher';
+import { WelcomeGateway } from './components/auth/WelcomeGateway';
+import { Clock } from 'lucide-react';
 
 function AppContent() {
+  const { user, isGuest, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen bg-[#070a12] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center animate-pulse shadow-lg shadow-indigo-500/20">
+            <Clock className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xs text-slate-400 font-mono tracking-widest uppercase">Loading OMNI...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // If not logged in and not guest, gate with the Welcome Gateway!
+  if (!user && !isGuest) {
+    return <WelcomeGateway />;
+  }
+
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#090d16] text-slate-100 antialiased select-none">
       <Navbar />

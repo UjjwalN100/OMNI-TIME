@@ -20,7 +20,8 @@ import {
   CheckCircle2,
   ChevronDown,
   User,
-  LogOut
+  LogOut,
+  Lock
 } from 'lucide-react';
 import { OmniModule } from '../../types';
 import { NotificationPopover } from './NotificationPopover';
@@ -41,7 +42,7 @@ export const Navbar: React.FC = () => {
     setIsRightPanelOpen
   } = useOmni();
 
-  const { user, setIsAuthModalOpen, signOut } = useAuth();
+  const { user, isGuest, exitGuestMode, setIsAuthModalOpen, signOut } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isEcosystemMenuOpen, setIsEcosystemMenuOpen] = useState(false);
 
@@ -112,6 +113,10 @@ export const Navbar: React.FC = () => {
                         </div>
                         {isActive ? (
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/30 text-indigo-300 font-medium">Active</span>
+                        ) : isGuest ? (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-medium flex items-center gap-1 border border-amber-500/20">
+                            <Lock className="w-2.5 h-2.5" /> Locked
+                          </span>
                         ) : app.status === 'coming_soon' ? (
                           <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-400">Connected</span>
                         ) : (
@@ -204,7 +209,7 @@ export const Navbar: React.FC = () => {
         {/* Notifications Popover */}
         <NotificationPopover />
 
-        {/* User Authentication Pill / Avatar */}
+        {/* User Authentication Pill / Avatar / Guest State */}
         {user ? (
           <div className="relative shrink-0">
             <button
@@ -241,6 +246,20 @@ export const Navbar: React.FC = () => {
                 </div>
               </>
             )}
+          </div>
+        ) : isGuest ? (
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-medium">
+              <Lock className="w-3 h-3 text-amber-400" />
+              <span>Guest</span>
+            </span>
+            <button
+              onClick={() => setIsAuthModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] shrink-0"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Sign In with Google</span>
+            </button>
           </div>
         ) : (
           <button

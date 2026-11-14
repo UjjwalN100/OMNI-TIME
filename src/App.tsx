@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthProvider } from './context/AuthContext';
 import { OmniProvider } from './context/OmniContext';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
@@ -6,6 +7,7 @@ import { RightPanel } from './components/layout/RightPanel';
 import { CalendarView } from './components/calendar/CalendarView';
 import { EventModal } from './components/modal/EventModal';
 import { CommandPalette } from './components/modal/CommandPalette';
+import { AuthModal } from './components/modal/AuthModal';
 
 function AppContent() {
   return (
@@ -18,14 +20,17 @@ function AppContent() {
       </div>
       <EventModal />
       <CommandPalette />
+      <AuthModal />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <OmniProvider>
-      <AppContent />
-    </OmniProvider>
+    <AuthProvider>
+      <OmniProvider>
+        <AppContent />
+      </OmniProvider>
+    </AuthProvider>
   );
 }

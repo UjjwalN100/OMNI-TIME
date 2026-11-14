@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@rollup/wasm-node": "^4.68.3",
+    "@supabase/supabase-js": "^2.119.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.469.0",

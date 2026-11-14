@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { OmniAgendaItem, CategoryFilter, ViewMode, EventCategory, TimeSlotSelection, AttachedDoc } from '../types';
 import { INITIAL_CATEGORIES, INITIAL_ITEMS, INITIAL_DATE_ATTACHMENTS, EVENT_BLUE, TASK_GREEN } from '../data/mockData';
 import { addDays, subDays, addWeeks, subWeeks, addMonths, subMonths, format } from '../utils/dateUtils';
+import { useAuth } from './AuthContext';
+import { supabase } from '../lib/supabase';
 
 export interface ModalState {
   isOpen: boolean;
@@ -52,6 +54,7 @@ interface OmniContextType {
 const OmniContext = createContext<OmniContextType | undefined>(undefined);
 
 export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user } = useAuth();
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('week');
   
@@ -89,13 +92,105 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
 
-  useEffect(() => {
-    localStorage.setItem('omni_agenda_items', JSON.stringify(items));
-  }, [items]);
+  // Sync from Supabase when user logs in
+  const fetchUserData = useCallback(async () => {
+    if (!user) return;
+    try {
+      // 1. Fetch agenda items
+      const { data: dbItems, error: itemsError } = await supabase
+        .from('agenda_items')
+        .select('*')
+        .order('start_time', { ascending: true });
+
+      // 2. Fetch documents
+      const { data: dbDocs } = await supabase
+        .from('documents')
+        .select('*');
+
+      if (!itemsError && dbItems) {
+        // Group attachments by item_id
+        const itemAttachments: Record<string, AttachedDoc[]> = {};
+        const dateAtts: Record<string, AttachedDoc[]> = {};
+
+        if (dbDocs) {
+          dbDocs.forEach((d: any) => {
+            const docObj: AttachedDoc = {
+              id: d.id,
+              name: d.name,
+              size: d.size || undefined,
+              type: d.type || 'doc',
+              source: d.source || (d.type === 'space' ? 'omni_space' : 'local'),
+              url: d.url || undefined,
+              uploadedAt: d.created_at ? format(new Date(d.created_at), 'h:mm a') : 'Just now'
+            };
+            if (d.item_id) {
+              if (!itemAttachments[d.item_id]) itemAttachments[d.item_id] = [];
+              itemAttachments[d.item_id].push(docObj);
+            } else if (d.date) {
+              if (!dateAtts[d.date]) dateAtts[d.date] = [];
+              dateAtts[d.date].push(docObj);
+            }
+          });
+        }
+
+        const mappedItems: OmniAgendaItem[] = dbItems.map((it: any) => ({
+          id: it.id,
+          title: it.title,
+          startTime: it.start_time,
+          endTime: it.end_time,
+          type: it.type as 'event' | 'task',
+          category: (it.category || 'work') as EventCategory,
+          color: it.type === 'task' ? TASK_GREEN : EVENT_BLUE,
+          completed: it.is_completed,
+          description: it.description || undefined,
+          attachments: itemAttachments[it.id] || []
+        }));
+
+        setItems(mappedItems);
+        setDateAttachments(dateAtts);
+      }
+    } catch (err) {
+      console.warn('Error fetching user data from Supabase:', err);
+    }
+  }, [user]);
 
   useEffect(() => {
-    localStorage.setItem('omni_date_attachments', JSON.stringify(dateAttachments));
-  }, [dateAttachments]);
+    if (user) {
+      fetchUserData();
+      // Realtime subscription
+      const channel = supabase.channel('omni_agenda_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'agenda_items' }, () => {
+          fetchUserData();
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'documents' }, () => {
+          fetchUserData();
+        })
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    } else {
+      // Revert to localStorage when logged out
+      const saved = localStorage.getItem('omni_agenda_items');
+      setItems(saved ? JSON.parse(saved) : INITIAL_ITEMS);
+      const savedDocs = localStorage.getItem('omni_date_attachments');
+      setDateAttachments(savedDocs ? JSON.parse(savedDocs) : INITIAL_DATE_ATTACHMENTS);
+    }
+  }, [user, fetchUserData]);
+
+  // Persist local copy
+  useEffect(() => {
+    if (!user) {
+      localStorage.setItem('omni_agenda_items', JSON.stringify(items));
+    }
+  }, [items, user]);
+
+  useEffect(() => {
+    if (!user) {
+      localStorage.setItem('omni_date_attachments', JSON.stringify(dateAttachments));
+    }
+  }, [dateAttachments, user]);
 
   // Global Keyboard Shortcuts
   useEffect(() => {
@@ -141,16 +236,40 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [modalState.isOpen, isCommandPaletteOpen]);
 
-  const addItem = (itemData: Omit<OmniAgendaItem, 'id'>) => {
+  const addItem = async (itemData: Omit<OmniAgendaItem, 'id'>) => {
+    const newItemId = `agenda-${Date.now()}`;
     const newItem: OmniAgendaItem = {
       ...itemData,
-      id: `agenda-${Date.now()}`,
+      id: newItemId,
       color: itemData.type === 'task' ? TASK_GREEN : EVENT_BLUE
     };
+    
+    // Optimistic local update
     setItems(prev => [...prev, newItem]);
+
+    // Supabase persist
+    if (user) {
+      try {
+        const dateStr = newItem.startTime.split('T')[0];
+        await supabase.from('agenda_items').insert({
+          id: newItemId,
+          user_id: user.id,
+          title: newItem.title,
+          date: dateStr,
+          start_time: newItem.startTime,
+          end_time: newItem.endTime,
+          type: newItem.type,
+          category: newItem.category,
+          is_completed: newItem.completed ?? false,
+          description: newItem.description || null
+        });
+      } catch (e) {
+        console.error('Supabase addItem error', e);
+      }
+    }
   };
 
-  const updateItem = (id: string, updatedFields: Partial<OmniAgendaItem>) => {
+  const updateItem = async (id: string, updatedFields: Partial<OmniAgendaItem>) => {
     setItems(prev => prev.map(it => {
       if (it.id === id) {
         const nextType = updatedFields.type ?? it.type;
@@ -159,14 +278,52 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return it;
     }));
+
+    if (user) {
+      try {
+        const payload: any = {};
+        if (updatedFields.title !== undefined) payload.title = updatedFields.title;
+        if (updatedFields.startTime !== undefined) {
+          payload.start_time = updatedFields.startTime;
+          payload.date = updatedFields.startTime.split('T')[0];
+        }
+        if (updatedFields.endTime !== undefined) payload.end_time = updatedFields.endTime;
+        if (updatedFields.type !== undefined) payload.type = updatedFields.type;
+        if (updatedFields.category !== undefined) payload.category = updatedFields.category;
+        if (updatedFields.completed !== undefined) payload.is_completed = updatedFields.completed;
+        if (updatedFields.description !== undefined) payload.description = updatedFields.description;
+        await supabase.from('agenda_items').update(payload).eq('id', id);
+      } catch (e) {
+        console.error('Supabase updateItem error', e);
+      }
+    }
   };
 
-  const deleteItem = (id: string) => {
+  const deleteItem = async (id: string) => {
     setItems(prev => prev.filter(it => it.id !== id));
+    if (user) {
+      try {
+        await supabase.from('agenda_items').delete().eq('id', id);
+      } catch (e) {
+        console.error('Supabase deleteItem error', e);
+      }
+    }
   };
 
-  const toggleItemCompleted = (id: string) => {
-    setItems(prev => prev.map(it => it.id === id ? { ...it, completed: !it.completed } : it));
+  const toggleItemCompleted = async (id: string) => {
+    const it = items.find(x => x.id === id);
+    if (!it) return;
+    const newStatus = !it.completed;
+
+    setItems(prev => prev.map(item => item.id === id ? { ...item, completed: newStatus } : item));
+
+    if (user) {
+      try {
+        await supabase.from('agenda_items').update({ is_completed: newStatus }).eq('id', id);
+      } catch (e) {
+        console.error('Supabase toggleItemCompleted error', e);
+      }
+    }
   };
 
   const toggleCategory = (categoryId: EventCategory) => {
@@ -222,10 +379,11 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Date-level attachment operations
-  const attachDocToDate = (dateStr: string, doc: Omit<AttachedDoc, 'id' | 'uploadedAt'>) => {
+  const attachDocToDate = async (dateStr: string, doc: Omit<AttachedDoc, 'id' | 'uploadedAt'>) => {
+    const newDocId = `doc-date-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const newDoc: AttachedDoc = {
       ...doc,
-      id: `doc-date-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      id: newDocId,
       uploadedAt: format(new Date(), 'h:mm a')
     };
 
@@ -236,9 +394,25 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
         [dateStr]: [newDoc, ...existing]
       };
     });
+
+    if (user) {
+      try {
+        await supabase.from('documents').insert({
+          id: newDocId,
+          user_id: user.id,
+          date: dateStr,
+          name: doc.name,
+          size: doc.size || null,
+          type: doc.type,
+          url: doc.url || null
+        });
+      } catch (e) {
+        console.error('Supabase attachDocToDate error', e);
+      }
+    }
   };
 
-  const removeDocFromDate = (dateStr: string, docId: string) => {
+  const removeDocFromDate = async (dateStr: string, docId: string) => {
     setDateAttachments(prev => {
       const existing = prev[dateStr] || [];
       return {
@@ -246,13 +420,22 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
         [dateStr]: existing.filter(d => d.id !== docId)
       };
     });
+
+    if (user) {
+      try {
+        await supabase.from('documents').delete().eq('id', docId);
+      } catch (e) {
+        console.error('Supabase removeDocFromDate error', e);
+      }
+    }
   };
 
   // Item-level attachment operations
-  const attachDocToItem = (itemId: string, doc: Omit<AttachedDoc, 'id' | 'uploadedAt'>) => {
+  const attachDocToItem = async (itemId: string, doc: Omit<AttachedDoc, 'id' | 'uploadedAt'>) => {
+    const newDocId = `doc-item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const newDoc: AttachedDoc = {
       ...doc,
-      id: `doc-item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      id: newDocId,
       uploadedAt: format(new Date(), 'h:mm a')
     };
 
@@ -266,9 +449,25 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return it;
     }));
+
+    if (user) {
+      try {
+        await supabase.from('documents').insert({
+          id: newDocId,
+          user_id: user.id,
+          item_id: itemId,
+          name: doc.name,
+          size: doc.size || null,
+          type: doc.type,
+          url: doc.url || null
+        });
+      } catch (e) {
+        console.error('Supabase attachDocToItem error', e);
+      }
+    }
   };
 
-  const removeDocFromItem = (itemId: string, docId: string) => {
+  const removeDocFromItem = async (itemId: string, docId: string) => {
     setItems(prev => prev.map(it => {
       if (it.id === itemId && it.attachments) {
         return {
@@ -278,6 +477,14 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return it;
     }));
+
+    if (user) {
+      try {
+        await supabase.from('documents').delete().eq('id', docId);
+      } catch (e) {
+        console.error('Supabase removeDocFromItem error', e);
+      }
+    }
   };
 
   return (

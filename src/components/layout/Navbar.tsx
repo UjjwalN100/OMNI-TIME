@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useOmni } from '../../context/OmniContext';
+import { useAuth } from '../../context/AuthContext';
 import { format } from '../../utils/dateUtils';
 import { 
   ChevronLeft, 
@@ -17,7 +18,9 @@ import {
   Clock,
   Home,
   CheckCircle2,
-  ChevronDown
+  ChevronDown,
+  User,
+  LogOut
 } from 'lucide-react';
 import { OmniModule } from '../../types';
 
@@ -37,6 +40,8 @@ export const Navbar: React.FC = () => {
     setIsRightPanelOpen
   } = useOmni();
 
+  const { user, setIsAuthModalOpen, signOut } = useAuth();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isEcosystemMenuOpen, setIsEcosystemMenuOpen] = useState(false);
 
   const ecosystemApps: { id: OmniModule; name: string; icon: any; status: 'active' | 'coming_soon' | 'paused' }[] = [
@@ -194,6 +199,51 @@ export const Navbar: React.FC = () => {
           <span>New</span>
           <kbd className="ml-1 text-[10px] text-indigo-200/70 font-mono">C</kbd>
         </button>
+
+        {/* User Authentication Pill / Avatar */}
+        {user ? (
+          <div className="relative">
+            <button
+              onClick={() => setIsUserMenuOpen(prev => !prev)}
+              className="flex items-center gap-2 p-1 pr-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/5 transition"
+            >
+              <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
+                {user.email ? user.email.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
+            </button>
+
+            {isUserMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
+                <div className="absolute right-0 top-full mt-2 w-56 glass-panel rounded-xl shadow-2xl p-2 z-50 border border-white/10 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="px-3 py-2 border-b border-white/5">
+                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Signed in as</p>
+                    <p className="text-xs font-medium text-white truncate mt-0.5">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      signOut();
+                      setIsUserMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 mt-1 rounded-lg text-xs text-rose-400 hover:bg-rose-500/10 transition"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-medium transition-all"
+          >
+            <User className="w-3.5 h-3.5 text-blue-400" />
+            <span>Sign In</span>
+          </button>
+        )}
 
         {/* Toggle Right Panel */}
         <button 

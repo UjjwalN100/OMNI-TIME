@@ -55,6 +55,49 @@ interface OmniContextType {
 
 const OmniContext = createContext<OmniContextType | undefined>(undefined);
 
+// Helper function to strip any legacy mock data and ensure pristine clean slate
+const cleanStoredItems = (saved: string | null): OmniAgendaItem[] => {
+  if (!saved) return [];
+  try {
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed)) {
+      const cleaned = parsed.filter((item: OmniAgendaItem) => 
+        !item.id?.startsWith('agenda-') && 
+        !item.title?.toLowerCase().includes('omni ecosystem') &&
+        !item.title?.toLowerCase().includes('review omni space') &&
+        !item.title?.toLowerCase().includes('zero-cost') &&
+        !item.title?.toLowerCase().includes('screen break')
+      );
+      if (cleaned.length !== parsed.length) {
+        localStorage.setItem('omni_agenda_items', JSON.stringify(cleaned));
+      }
+      return cleaned;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return [];
+};
+
+const cleanStoredDocs = (saved: string | null): Record<string, AttachedDoc[]> => {
+  if (!saved) return {};
+  try {
+    const parsed = JSON.parse(saved);
+    const cleaned: Record<string, AttachedDoc[]> = {};
+    for (const [date, docs] of Object.entries(parsed as Record<string, AttachedDoc[]>)) {
+      const valid = docs.filter(d => !d.id?.startsWith('doc-daily-plan') && !d.id?.startsWith('doc-space-notes'));
+      if (valid.length > 0) cleaned[date] = valid;
+    }
+    if (Object.keys(cleaned).length !== Object.keys(parsed).length) {
+      localStorage.setItem('omni_date_attachments', JSON.stringify(cleaned));
+    }
+    return cleaned;
+  } catch (e) {
+    console.error(e);
+  }
+  return {};
+};
+
 export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -81,13 +124,11 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [viewMode, setViewMode] = useState<ViewMode>('week');
   
   const [items, setItems] = useState<OmniAgendaItem[]>(() => {
-    const saved = localStorage.getItem('omni_agenda_items');
-    return saved ? JSON.parse(saved) : INITIAL_ITEMS;
+    return cleanStoredItems(localStorage.getItem('omni_agenda_items'));
   });
 
   const [dateAttachments, setDateAttachments] = useState<Record<string, AttachedDoc[]>>(() => {
-    const saved = localStorage.getItem('omni_date_attachments');
-    return saved ? JSON.parse(saved) : INITIAL_DATE_ATTACHMENTS;
+    return cleanStoredDocs(localStorage.getItem('omni_date_attachments'));
   });
 
   const [categories, setCategories] = useState<CategoryFilter[]>(INITIAL_CATEGORIES);
@@ -193,11 +234,9 @@ export const OmniProvider: React.FC<{ children: React.ReactNode }> = ({ children
         supabase.removeChannel(channel);
       };
     } else {
-      // Revert to localStorage when logged out
-      const saved = localStorage.getItem('omni_agenda_items');
-      setItems(saved ? JSON.parse(saved) : INITIAL_ITEMS);
-      const savedDocs = localStorage.getItem('omni_date_attachments');
-      setDateAttachments(savedDocs ? JSON.parse(savedDocs) : INITIAL_DATE_ATTACHMENTS);
+      // Revert to clean localStorage when logged out
+      setItems(cleanStoredItems(localStorage.getItem('omni_agenda_items')));
+      setDateAttachments(cleanStoredDocs(localStorage.getItem('omni_date_attachments')));
     }
   }, [user, fetchUserData]);
 

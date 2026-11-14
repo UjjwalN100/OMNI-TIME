@@ -200,22 +200,10 @@ export const Sidebar: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="space-y-1.5">
-              <div className="group flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/5 text-xs text-slate-700 dark:text-slate-300 transition-colors cursor-pointer">
-                <div className="flex items-center gap-2 truncate">
-                  <FileText className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400 shrink-0" />
-                  <span className="truncate font-medium">OMNI Ecosystem v1 Arch</span>
-                </div>
-                <span className="text-[9px] text-purple-600 dark:text-purple-400/80 font-mono shrink-0">9:00 AM</span>
-              </div>
-
-              <div className="group flex items-center justify-between p-2 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] border border-slate-200 dark:border-white/5 text-xs text-slate-700 dark:text-slate-300 transition-colors cursor-pointer">
-                <div className="flex items-center gap-2 truncate">
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-pink-500 dark:text-pink-400 shrink-0" />
-                  <span className="truncate font-medium">Zero-Cost Cloud Topology</span>
-                </div>
-                <span className="text-[9px] text-pink-600 dark:text-pink-400/80 font-mono shrink-0">3:00 PM</span>
-              </div>
+            <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                No Space documents linked yet.
+              </p>
             </div>
           )}
         </div>

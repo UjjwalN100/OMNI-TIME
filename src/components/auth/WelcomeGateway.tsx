@@ -50,18 +50,18 @@ export const WelcomeGateway: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-[#070a12] text-slate-100 flex flex-col justify-between p-4 sm:p-6 md:p-8 relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen w-screen bg-[#171A2B] text-slate-100 flex flex-col justify-between p-4 sm:p-6 md:p-8 relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
       {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-tr from-indigo-600/15 via-blue-600/10 to-cyan-500/10 blur-[120px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-tr from-purple-600/15 via-indigo-600/10 to-purple-400/10 blur-[120px] pointer-events-none rounded-full" />
       
       {/* Top Header */}
       <header className="flex items-center justify-between max-w-5xl w-full mx-auto relative z-10">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-500 to-purple-400 flex items-center justify-center shadow-lg shadow-purple-500/25">
             <Clock className="w-4 h-4 text-white" />
           </div>
           <div className="flex items-baseline gap-1.5">
-            <span className="font-bold text-sm tracking-widest text-indigo-400 uppercase">OMNI</span>
+            <span className="font-bold text-sm tracking-widest text-purple-400 uppercase">OMNI</span>
             <span className="font-semibold text-base text-slate-100">Time</span>
           </div>
         </div>
@@ -75,12 +75,12 @@ export const WelcomeGateway: React.FC = () => {
       <main className="max-w-4xl w-full mx-auto my-auto py-8 relative z-10 flex flex-col items-center">
         {/* Hero Title */}
         <div className="text-center max-w-2xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-medium mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
             <span>Welcome to Distraction-Free Daily Planning</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-3 leading-tight">
-            Structure your day with <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">zero friction</span>.
+            Structure your day with <span className="bg-gradient-to-r from-purple-300 via-indigo-200 to-purple-400 bg-clip-text text-transparent">zero friction</span>.
           </h1>
           <p className="text-sm sm:text-base text-slate-400">
             Choose how you would like to get started today.
@@ -96,16 +96,16 @@ export const WelcomeGateway: React.FC = () => {
         {/* The Two Entry Options Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-3xl">
           {/* OPTION 1: GOOGLE / GMAIL (FULL ACCESS) */}
-          <div className="relative group rounded-2xl bg-gradient-to-b from-indigo-950/40 to-slate-900/60 border-2 border-indigo-500/50 p-6 flex flex-col justify-between shadow-xl shadow-indigo-950/40 hover:border-indigo-400 transition-all">
-            <div className="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-[10px] font-bold text-white uppercase tracking-wider shadow-md shadow-blue-500/30">
+          <div className="relative group rounded-2xl bg-gradient-to-b from-purple-950/40 to-slate-900/60 border-2 border-purple-500/50 p-6 flex flex-col justify-between shadow-xl shadow-purple-950/40 hover:border-purple-400 transition-all">
+            <div className="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-[10px] font-bold text-white uppercase tracking-wider shadow-md shadow-purple-500/30">
               Recommended • Full Access
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-3 mt-1">
                 <h3 className="text-lg font-bold text-white">Sign In with Google</h3>
-                <span className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-300">
-                  <Check className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-300">
+                  <Check className="w-3.5 h-3.5 text-purple-400" />
                 </span>
               </div>
               <p className="text-xs text-slate-300 mb-4 leading-relaxed">
@@ -235,7 +235,7 @@ export const WelcomeGateway: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsSignUp(!isSignUp)}
-                className="text-indigo-400 hover:text-indigo-300"
+                className="text-purple-400 hover:text-purple-300"
               >
                 {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
               </button>
@@ -247,7 +247,7 @@ export const WelcomeGateway: React.FC = () => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-purple-500"
               />
             </div>
             <div>
@@ -257,13 +257,13 @@ export const WelcomeGateway: React.FC = () => {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-purple-500"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition"
+              className="w-full py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-semibold transition"
             >
               {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Sign In'}
             </button>

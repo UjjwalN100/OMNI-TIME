@@ -63,7 +63,7 @@ export const CommandPalette: React.FC = () => {
       >
         {/* Search input header */}
         <div className="p-4 border-b border-white/10 flex items-center gap-3">
-          <Search className="w-5 h-5 text-indigo-400 shrink-0" />
+          <Search className="w-5 h-5 text-purple-400 shrink-0" />
           <input
             type="text"
             autoFocus
@@ -98,7 +98,7 @@ export const CommandPalette: React.FC = () => {
                       className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs text-slate-200 hover:bg-white/10 transition-colors group"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className="w-4 h-4 text-indigo-400" />
+                        <Icon className="w-4 h-4 text-purple-400" />
                         <span>{cmd.label}</span>
                       </div>
                       <kbd className="px-1.5 py-0.5 text-[10px] bg-white/10 rounded text-slate-300 font-mono">

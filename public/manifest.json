@@ -4,8 +4,8 @@
   "description": "Distraction-Free Daily Planning & Intelligent Calendar",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#090d16",
-  "theme_color": "#0d131f",
+  "background_color": "#171A2B",
+  "theme_color": "#171A2B",
   "orientation": "any",
   "icons": [
     {

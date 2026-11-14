@@ -56,7 +56,7 @@ export const NotificationPopover: React.FC = () => {
         {isGuest ? (
           <div className="relative">
             <BellOff className="w-4 h-4 text-slate-500" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-[#0d131f]" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-[#171A2B]" />
           </div>
         ) : permission === 'granted' ? (
           <Bell className="w-4 h-4" />
@@ -64,7 +64,7 @@ export const NotificationPopover: React.FC = () => {
           <BellRing className="w-4 h-4 text-amber-400" />
         )}
         {!isGuest && unreadCount > 0 && (
-          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-500 ring-2 ring-[#0d131f] animate-pulse" />
+          <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-purple-500 ring-2 ring-[#171A2B] animate-pulse" />
         )}
       </button>
 
@@ -72,11 +72,11 @@ export const NotificationPopover: React.FC = () => {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 glass-panel rounded-2xl shadow-2xl p-4 z-50 border border-white/10 animate-in fade-in zoom-in-95 duration-100 bg-[#0e1422] text-slate-100 flex flex-col max-h-[85vh]">
+          <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 glass-panel rounded-2xl shadow-2xl p-4 z-50 border border-white/10 animate-in fade-in zoom-in-95 duration-100 bg-[#1E2238] text-slate-100 flex flex-col max-h-[85vh]">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-white/5 shrink-0">
               <div className="flex items-center gap-2">
-                <Bell className="w-4 h-4 text-indigo-400" />
+                <Bell className="w-4 h-4 text-purple-400" />
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Notifications</h4>
               </div>
               <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export const NotificationPopover: React.FC = () => {
                     setIsOpen(false);
                     setIsAuthModalOpen(true);
                   }}
-                  className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition active:scale-[0.99]"
+                  className="w-full py-2 px-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-600/25 transition active:scale-[0.99]"
                 >
                   Sign In with Google to Unlock
                 </button>
@@ -123,11 +123,11 @@ export const NotificationPopover: React.FC = () => {
                 {/* Permission & Sound Controls */}
                 <div className="py-3 border-b border-white/5 space-y-2 shrink-0">
                   {permission !== 'granted' ? (
-                    <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs">
+                    <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xs">
                       <p className="text-slate-300 font-medium mb-1.5">Desktop Alerts are disabled</p>
                       <button
                         onClick={requestPermission}
-                        className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition shadow-sm"
+                        className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold transition shadow-sm"
                       >
                         <BellRing className="w-3.5 h-3.5" />
                         <span>Enable Desktop Alerts</span>
@@ -156,7 +156,7 @@ export const NotificationPopover: React.FC = () => {
                     >
                       {soundEnabled ? (
                         <>
-                          <Volume2 className="w-3.5 h-3.5 text-indigo-400" />
+                          <Volume2 className="w-3.5 h-3.5 text-purple-400" />
                           <span>Chimes: On</span>
                         </>
                       ) : (
@@ -170,7 +170,7 @@ export const NotificationPopover: React.FC = () => {
                     {isInstallable && (
                       <button
                         onClick={installApp}
-                        className="flex items-center gap-1 px-2 py-1 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition text-[11px] font-medium"
+                        className="flex items-center gap-1 px-2 py-1 rounded bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 transition text-[11px] font-medium"
                       >
                         <Download className="w-3 h-3" />
                         <span>Install App</span>
@@ -195,7 +195,7 @@ export const NotificationPopover: React.FC = () => {
                         className={`p-2.5 rounded-xl border transition-colors flex items-start gap-2.5 ${
                           a.read 
                             ? 'bg-white/[0.02] border-white/5 text-slate-400' 
-                            : 'bg-white/[0.05] border-indigo-500/20 text-slate-200'
+                            : 'bg-white/[0.05] border-purple-500/30 text-slate-200'
                         }`}
                       >
                         <div className="mt-0.5">

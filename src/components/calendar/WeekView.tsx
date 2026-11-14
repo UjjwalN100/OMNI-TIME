@@ -89,9 +89,9 @@ export const WeekView: React.FC = () => {
   const currentTimeTop = currentMinutes; // exactly 1px per minute
 
   return (
-    <div className="flex-1 flex flex-col h-full select-none bg-[#090d16] overflow-hidden">
+    <div className="flex-1 flex flex-col h-full select-none bg-[#171A2B] overflow-hidden">
       {/* Sticky Day Column Headers */}
-      <div className="flex border-b border-white/5 bg-[#0d131f]/95 backdrop-blur-md z-30 shrink-0">
+      <div className="flex border-b border-white/5 bg-[#1E2238]/95 backdrop-blur-md z-30 shrink-0">
         {/* Exact width matching time column: w-20 */}
         <div className="w-20 shrink-0 border-r border-white/5" />
         <div className="flex-1 grid grid-cols-7 divide-x divide-white/5">
@@ -108,15 +108,15 @@ export const WeekView: React.FC = () => {
                 }`}
               >
                 <div className={`text-[11px] font-medium tracking-wide uppercase ${
-                  isCurrent ? 'text-indigo-400 font-bold' : 'text-slate-400'
+                  isCurrent ? 'text-purple-400 font-bold' : 'text-slate-400'
                 }`}>
                   {format(day, 'EEE')}
                 </div>
                 <div className={`inline-flex items-center justify-center w-7 h-7 mt-0.5 rounded-full text-xs font-semibold ${
                   isCurrent 
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/40 ring-2 ring-indigo-400' 
+                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/40 ring-2 ring-purple-400' 
                     : isSelected
-                    ? 'border border-indigo-400/50 text-indigo-300'
+                    ? 'border border-purple-400/50 text-purple-300'
                     : 'text-slate-300'
                 }`}>
                   {format(day, 'd')}
@@ -152,10 +152,10 @@ export const WeekView: React.FC = () => {
                       key={colIdx}
                       onClick={() => handleSlotClick(day, hour)}
                       title={`Click to schedule at ${displayLabel}`}
-                      className="h-full hover:bg-indigo-500/[0.06] transition-all cursor-pointer group/slot relative"
+                      className="h-full hover:bg-purple-500/[0.06] transition-all cursor-pointer group/slot relative"
                     >
                       {/* Subtle hover pill showing the exact hour of this box */}
-                      <span className="opacity-0 group-hover/slot:opacity-100 absolute left-2 top-1 px-1.5 py-0.5 rounded bg-indigo-950/80 border border-indigo-500/30 text-[9px] font-mono text-indigo-200 pointer-events-none transition-opacity shadow-sm z-10">
+                      <span className="opacity-0 group-hover/slot:opacity-100 absolute left-2 top-1 px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-500/30 text-[9px] font-mono text-purple-200 pointer-events-none transition-opacity shadow-sm z-10">
                         + {displayLabel}
                       </span>
                     </div>
@@ -211,7 +211,7 @@ export const WeekView: React.FC = () => {
                               className="w-1.5 h-1.5 rounded-full shrink-0 mt-1" 
                               style={{ backgroundColor: item.color }} 
                             />
-                            <div className={`text-[11px] font-semibold text-white line-clamp-2 leading-tight group-hover:text-indigo-200 ${
+                            <div className={`text-[11px] font-semibold text-white line-clamp-2 leading-tight group-hover:text-purple-200 ${
                               item.completed ? 'line-through text-slate-400' : ''
                             }`}>
                               {item.title}
@@ -229,8 +229,8 @@ export const WeekView: React.FC = () => {
 
                           {/* Attachments Indicator on Card */}
                           {item.attachments && item.attachments.length > 0 && height > 40 && (
-                            <div className="flex items-center gap-1 mt-1 text-[9px] text-indigo-200 truncate">
-                              <Paperclip className="w-2.5 h-2.5 text-indigo-400 shrink-0" />
+                            <div className="flex items-center gap-1 mt-1 text-[9px] text-purple-200 truncate">
+                              <Paperclip className="w-2.5 h-2.5 text-purple-400 shrink-0" />
                               <span className="truncate">{item.attachments[0].name}</span>
                               {item.attachments.length > 1 && (
                                 <span className="text-[8px] text-slate-400 font-mono">+{item.attachments.length - 1}</span>
@@ -239,7 +239,7 @@ export const WeekView: React.FC = () => {
                           )}
 
                           {item.linkedResource && height > 60 && (
-                            <div className="flex items-center gap-1 mt-1 text-[9px] text-indigo-300 truncate">
+                            <div className="flex items-center gap-1 mt-1 text-[9px] text-purple-300 truncate">
                               <Layers className="w-2.5 h-2.5 shrink-0" />
                               <span className="truncate">{item.linkedResource.title}</span>
                             </div>

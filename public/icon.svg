@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0e1726" />
-      <stop offset="100%" stop-color="#060911" />
+      <stop offset="0%" stop-color="#1E2238" />
+      <stop offset="100%" stop-color="#171A2B" />
     </linearGradient>
     <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1" />
-      <stop offset="50%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#3b82f6" />
+      <stop offset="0%" stop-color="#7867D8" />
+      <stop offset="50%" stop-color="#9686E2" />
+      <stop offset="100%" stop-color="#7867D8" />
     </linearGradient>
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="24" result="blur" />
@@ -15,24 +15,24 @@
     </filter>
   </defs>
   
-  <!-- Outer Rounded Square -->
-  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="8" />
+  <!-- Outer Rounded Square in Midnight Navy -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" stroke="#2B304F" stroke-width="8" />
   
-  <!-- Glowing Center Ring -->
+  <!-- Glowing Center Ring in Calm Purple -->
   <circle cx="256" cy="256" r="160" fill="none" stroke="url(#ringGrad)" stroke-width="24" stroke-linecap="round" filter="url(#glow)" />
   
   <!-- Subtle Internal Core -->
-  <circle cx="256" cy="256" r="20" fill="#38bdf8" filter="url(#glow)" />
+  <circle cx="256" cy="256" r="20" fill="#7867D8" filter="url(#glow)" />
   
-  <!-- Clock Hands -->
+  <!-- Clock Hands in Soft White and Calm Purple -->
   <!-- Hour hand pointing to 10 -->
-  <line x1="256" y1="256" x2="190" y2="150" stroke="#ffffff" stroke-width="18" stroke-linecap="round" />
+  <line x1="256" y1="256" x2="190" y2="150" stroke="#F5F6FA" stroke-width="18" stroke-linecap="round" />
   <!-- Minute hand pointing to 2 -->
-  <line x1="256" y1="256" x2="340" y2="190" stroke="#38bdf8" stroke-width="14" stroke-linecap="round" />
+  <line x1="256" y1="256" x2="340" y2="190" stroke="#7867D8" stroke-width="14" stroke-linecap="round" />
   
-  <!-- Subtle Hour Ticks -->
-  <circle cx="256" cy="120" r="8" fill="#818cf8" />
-  <circle cx="392" cy="256" r="8" fill="#818cf8" />
-  <circle cx="256" cy="392" r="8" fill="#818cf8" />
-  <circle cx="120" cy="256" r="8" fill="#818cf8" />
+  <!-- Subtle Hour Ticks in Slate Grey / Calm Purple -->
+  <circle cx="256" cy="120" r="8" fill="#8B91A7" />
+  <circle cx="392" cy="256" r="8" fill="#7867D8" />
+  <circle cx="256" cy="392" r="8" fill="#8B91A7" />
+  <circle cx="120" cy="256" r="8" fill="#7867D8" />
 </svg>

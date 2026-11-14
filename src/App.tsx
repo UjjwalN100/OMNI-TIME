@@ -18,9 +18,9 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen bg-[#070a12] flex items-center justify-center">
+      <div className="h-screen w-screen bg-[#171A2B] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center animate-pulse shadow-lg shadow-indigo-500/20">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-purple-400 flex items-center justify-center animate-pulse shadow-lg shadow-purple-500/25">
             <Clock className="w-5 h-5 text-white" />
           </div>
           <span className="text-xs text-slate-400 font-mono tracking-widest uppercase">Loading OMNI...</span>
@@ -35,7 +35,7 @@ function AppContent() {
   }
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#090d16] text-slate-100 antialiased select-none">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#171A2B] text-slate-100 antialiased select-none">
       <Navbar />
       <div className="flex-1 flex overflow-hidden relative">
         <Sidebar />

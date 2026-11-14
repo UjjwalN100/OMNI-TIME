@@ -223,7 +223,7 @@ export const EventModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-150">
       <div 
-        className="glass-panel w-full max-w-lg max-h-[92vh] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col bg-[#0e1422]"
+        className="glass-panel w-full max-w-lg max-h-[92vh] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col bg-[#1E2238]"
         onClick={e => e.stopPropagation()}
       >
         {/* Pinned Modal Header */}
@@ -248,15 +248,15 @@ export const EventModal: React.FC = () => {
         {/* Scrollable Form Body */}
         <form id="event-modal-form" onSubmit={handleSave} className="p-5 space-y-3.5 overflow-y-auto flex-1 text-slate-200">
           {/* Auto-filled Slot Banner */}
-          <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/25">
+          <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-purple-500/10 border border-purple-500/25">
             <div className="flex items-center gap-2 text-xs">
-              <CalendarCheck className="w-4 h-4 text-indigo-400 shrink-0" />
+              <CalendarCheck className="w-4 h-4 text-purple-400 shrink-0" />
               <div className="text-slate-300">
-                Slot: <span className="font-semibold text-indigo-200">{formatFriendlyTime(startTime)} – {formatFriendlyTime(endTime)}</span>
+                Slot: <span className="font-semibold text-purple-200">{formatFriendlyTime(startTime)} – {formatFriendlyTime(endTime)}</span>
                 <span className="text-slate-400 ml-1 font-mono text-[11px]">({selectedDuration}m)</span>
               </div>
             </div>
-            <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold tracking-wider">
+            <span className="text-[9px] uppercase px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-semibold tracking-wider">
               Auto-filled
             </span>
           </div>
@@ -343,7 +343,7 @@ export const EventModal: React.FC = () => {
                   onClick={() => handleDurationSelect(mins)}
                   className={`py-1 rounded-lg text-xs font-medium transition-all ${
                     selectedDuration === mins
-                      ? 'bg-indigo-600 text-white font-semibold shadow-sm'
+                      ? 'bg-purple-600 text-white font-semibold shadow-sm'
                       : 'bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]'
                   }`}
                 >
@@ -384,7 +384,7 @@ export const EventModal: React.FC = () => {
           <div className="pt-1">
             <div className="flex items-center justify-between mb-1.5">
               <label className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
+                <Paperclip className="w-3.5 h-3.5 text-purple-400" />
                 <span>Attached Files & Docs</span>
               </label>
               {isGuest ? (
@@ -404,7 +404,7 @@ export const EventModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
+                    className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 transition-colors"
                   >
                     <Upload className="w-3 h-3" />
                     <span>Upload File</span>
@@ -452,9 +452,9 @@ export const EventModal: React.FC = () => {
             ) : (
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className="p-2.5 rounded-xl border border-dashed border-white/10 hover:border-indigo-500/40 hover:bg-indigo-500/[0.02] transition-colors cursor-pointer text-center text-slate-400 text-xs flex items-center justify-center gap-2"
+                className="p-2.5 rounded-xl border border-dashed border-white/10 hover:border-purple-500/40 hover:bg-purple-500/[0.02] transition-colors cursor-pointer text-center text-slate-400 text-xs flex items-center justify-center gap-2"
               >
-                <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
+                <Paperclip className="w-3.5 h-3.5 text-purple-400" />
                 <span>Click to attach documents, PDFs, or slides</span>
               </div>
             )}
@@ -470,7 +470,7 @@ export const EventModal: React.FC = () => {
               placeholder="Add key notes or goals..."
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-lg p-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"
+              className="w-full bg-white/[0.04] border border-white/10 rounded-lg p-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 resize-none"
             />
           </div>
         </form>
@@ -499,7 +499,7 @@ export const EventModal: React.FC = () => {
             <button
               type="submit"
               form="event-modal-form"
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-md shadow-purple-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               <Check className="w-3.5 h-3.5" />
               <span>{modalState.item ? 'Save Changes' : 'Schedule Item'}</span>

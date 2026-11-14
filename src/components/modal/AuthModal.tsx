@@ -75,7 +75,7 @@ export const AuthModal: React.FC = () => {
 
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20 mb-3">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/25 mb-3">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-white">
@@ -146,7 +146,7 @@ export const AuthModal: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
                 required
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500"
               />
             </div>
           </div>
@@ -161,7 +161,7 @@ export const AuthModal: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40 focus:border-purple-500"
               />
             </div>
           </div>
@@ -169,7 +169,7 @@ export const AuthModal: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-blue-600/20 disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-semibold transition shadow-lg shadow-purple-600/25 disabled:opacity-50"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -190,7 +190,7 @@ export const AuthModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => { setIsSignUp(false); setError(null); }}
-                className="text-blue-400 hover:text-blue-300 font-medium ml-1"
+                className="text-purple-400 hover:text-purple-300 font-medium ml-1"
               >
                 Sign In
               </button>
@@ -201,7 +201,7 @@ export const AuthModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => { setIsSignUp(true); setError(null); }}
-                className="text-blue-400 hover:text-blue-300 font-medium ml-1"
+                className="text-purple-400 hover:text-purple-300 font-medium ml-1"
               >
                 Sign Up
               </button>

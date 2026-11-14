@@ -51,9 +51,9 @@ export const MonthView: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#090d16] select-none overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-[#171A2B] select-none overflow-hidden">
       {/* Day Names Header */}
-      <div className="grid grid-cols-7 border-b border-white/5 bg-[#0d131f]/90 text-center py-2 shrink-0">
+      <div className="grid grid-cols-7 border-b border-white/5 bg-[#1E2238]/90 text-center py-2 shrink-0">
         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(dayName => (
           <div key={dayName} className="text-xs font-semibold text-slate-400 tracking-wider uppercase">
             {dayName}
@@ -82,7 +82,7 @@ export const MonthView: React.FC = () => {
               <div className="flex items-center justify-between mb-1">
                 <span className={`text-xs font-semibold w-6 h-6 rounded-full flex items-center justify-center ${
                   isCurrent 
-                    ? 'bg-indigo-600 text-white ring-1 ring-indigo-400' 
+                    ? 'bg-purple-600 text-white ring-1 ring-purple-400' 
                     : isCurrentMonthDay 
                     ? 'text-slate-300' 
                     : 'text-slate-600'

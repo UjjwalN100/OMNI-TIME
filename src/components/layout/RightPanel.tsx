@@ -134,12 +134,12 @@ export const RightPanel: React.FC = () => {
   };
 
   return (
-    <aside className="w-80 border-l border-white/5 bg-[#0b101b] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto">
+    <aside className="w-80 border-l border-white/5 bg-[#171A2B] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto">
       {/* Header */}
       <div className="p-4 border-b border-white/5 bg-gradient-to-b from-slate-900/40 to-transparent">
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-indigo-400" />
+            <Calendar className="w-4 h-4 text-purple-400" />
             <h3 className="text-xs font-semibold text-slate-100 uppercase tracking-wider">
               Agenda
             </h3>
@@ -165,15 +165,15 @@ export const RightPanel: React.FC = () => {
       </div>
 
       {/* SECTION: Documents Attached to this Date */}
-      <div className="p-3.5 border-b border-white/5 bg-indigo-950/[0.1]">
+      <div className="p-3.5 border-b border-white/5 bg-purple-950/[0.15]">
         <div className="flex items-center justify-between">
           <button 
             onClick={() => setIsDayDocsOpen(prev => !prev)}
             className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-300 uppercase tracking-wider hover:text-white transition-colors"
           >
-            <Paperclip className="w-3.5 h-3.5 text-indigo-400" />
+            <Paperclip className="w-3.5 h-3.5 text-purple-400" />
             <span>Date Documents</span>
-            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-300 font-mono">
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-purple-500/20 text-purple-300 font-mono">
               {currentDayAttachments.length}
             </span>
             {isDayDocsOpen ? <ChevronUp className="w-3 h-3 text-slate-400" /> : <ChevronDown className="w-3 h-3 text-slate-400" />}
@@ -201,7 +201,7 @@ export const RightPanel: React.FC = () => {
             <button
               type="button"
               onClick={() => dayFileInputRef.current?.click()}
-              className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 border border-indigo-500/30 transition-colors"
+              className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/30 transition-colors"
             >
               <Upload className="w-3 h-3" />
               <span>Attach File</span>
@@ -269,7 +269,7 @@ export const RightPanel: React.FC = () => {
             placeholder="Title (e.g. Design review, Team sync)..."
             value={title}
             onChange={e => setTitle(e.target.value)}
-            className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            className="w-full bg-white/[0.04] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-200 placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
           />
 
           {/* Type Toggle: Event (Blue) vs Task (Green) */}
@@ -329,7 +329,7 @@ export const RightPanel: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="mt-3.5 px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-xs font-semibold shadow-sm transition-colors"
+              className="mt-3.5 px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded-md text-xs font-semibold shadow-sm transition-colors"
             >
               Add
             </button>
@@ -413,9 +413,9 @@ export const RightPanel: React.FC = () => {
                       {item.attachments.map(att => (
                         <div 
                           key={att.id}
-                          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[9px] text-indigo-200 truncate max-w-[190px]"
+                          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white/[0.06] border border-white/10 text-[9px] text-purple-200 truncate max-w-[190px]"
                         >
-                          <Paperclip className="w-2.5 h-2.5 text-indigo-400 shrink-0" />
+                          <Paperclip className="w-2.5 h-2.5 text-purple-400 shrink-0" />
                           <span className="truncate">{att.name}</span>
                         </div>
                       ))}
@@ -423,7 +423,7 @@ export const RightPanel: React.FC = () => {
                   )}
 
                   {item.linkedResource && (
-                    <div className="flex items-center gap-1 mt-1 text-[9px] text-indigo-300 truncate">
+                    <div className="flex items-center gap-1 mt-1 text-[9px] text-purple-300 truncate">
                       <Layers className="w-2.5 h-2.5 shrink-0" />
                       <span className="truncate">{item.linkedResource.title}</span>
                     </div>

@@ -78,7 +78,7 @@ export const DayView: React.FC = () => {
   const currentTimeTop = (currentMinutes / 60) * 64;
 
   return (
-    <div ref={containerRef} className="flex-1 overflow-y-auto h-full relative select-none bg-[#090d16] pb-24">
+    <div ref={containerRef} className="flex-1 overflow-y-auto h-full relative select-none bg-[#171A2B] pb-24">
       <div className="relative min-w-[600px]">
         {/* Pixel-Perfect Rows: Each hour row contains both the label and the slot box */}
         {HOURS.map(hour => {
@@ -96,9 +96,9 @@ export const DayView: React.FC = () => {
               <div 
                 onClick={() => handleSlotClick(hour)}
                 title={`Click to schedule at ${displayLabel}`}
-                className="flex-1 hover:bg-indigo-500/[0.05] transition-all cursor-pointer relative flex items-center pl-4 group/slot"
+                className="flex-1 hover:bg-purple-500/[0.06] transition-all cursor-pointer relative flex items-center pl-4 group/slot"
               >
-                <span className="opacity-0 group-hover/slot:opacity-100 px-2 py-0.5 rounded bg-indigo-950/80 border border-indigo-500/30 text-[10px] font-mono text-indigo-200 pointer-events-none transition-opacity shadow-sm">
+                <span className="opacity-0 group-hover/slot:opacity-100 px-2 py-0.5 rounded bg-purple-950/80 border border-purple-500/30 text-[10px] font-mono text-purple-200 pointer-events-none transition-opacity shadow-sm">
                   + Schedule at {displayLabel}
                 </span>
               </div>
@@ -175,9 +175,9 @@ export const DayView: React.FC = () => {
                     {item.attachments.map(att => (
                       <div 
                         key={att.id}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/[0.08] text-[10px] text-indigo-200 border border-white/10"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/[0.08] text-[10px] text-purple-200 border border-white/10"
                       >
-                        <Paperclip className="w-2.5 h-2.5 text-indigo-400" />
+                        <Paperclip className="w-2.5 h-2.5 text-purple-400" />
                         <span className="truncate">{att.name}</span>
                       </div>
                     ))}
@@ -185,8 +185,8 @@ export const DayView: React.FC = () => {
                 )}
 
                 {item.linkedResource && (
-                  <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-md bg-white/[0.08] text-[10px] text-indigo-300 border border-white/10">
-                    <Layers className="w-3 h-3 text-indigo-400" />
+                  <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-md bg-white/[0.08] text-[10px] text-purple-300 border border-white/10">
+                    <Layers className="w-3 h-3 text-purple-400" />
                     <span className="truncate">{item.linkedResource.title}</span>
                   </div>
                 )}

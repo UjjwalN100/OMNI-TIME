@@ -53,7 +53,7 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-64 border-r border-white/5 bg-[#0b101b] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto">
+    <aside className="w-64 border-r border-white/5 bg-[#171A2B] flex flex-col h-[calc(100vh-3.5rem)] select-none shrink-0 overflow-y-auto">
       {/* Mini Calendar Widget */}
       <div className="p-4 border-b border-white/5">
         <div className="flex items-center justify-between mb-2">
@@ -62,8 +62,8 @@ export const Sidebar: React.FC = () => {
               {format(miniCalMonth, 'MMMM yyyy')}
             </span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-              <span className="text-[10px] text-indigo-300 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+              <span className="text-[10px] text-purple-300 font-medium">
                 Today: {format(todayDate, 'EEE, MMM d')}
               </span>
             </div>
@@ -109,9 +109,9 @@ export const Sidebar: React.FC = () => {
                 title={isCurrentDay ? `Today (${format(day, 'MMM d')})` : format(day, 'MMM d, yyyy')}
                 className={`h-7 w-7 mx-auto rounded-full text-[11px] flex flex-col items-center justify-center transition-all relative ${
                   isCurrentDay && isSelected
-                    ? 'bg-indigo-600 text-white font-bold ring-2 ring-indigo-400 ring-offset-1 ring-offset-[#0b101b] shadow-md shadow-indigo-500/40'
+                    ? 'bg-purple-600 text-white font-bold ring-2 ring-purple-400 ring-offset-1 ring-offset-[#171A2B] shadow-md shadow-purple-500/40'
                     : isCurrentDay
-                    ? 'bg-indigo-500/20 text-indigo-300 font-bold border-2 border-indigo-400 shadow-sm shadow-indigo-500/30 hover:bg-indigo-500/30'
+                    ? 'bg-purple-500/20 text-purple-300 font-bold border-2 border-purple-400 shadow-sm shadow-purple-500/30 hover:bg-purple-500/30'
                     : isSelected
                     ? 'bg-white/20 text-white font-semibold'
                     : isCurrentMonth
@@ -121,7 +121,7 @@ export const Sidebar: React.FC = () => {
               >
                 <span className="leading-none">{format(day, 'd')}</span>
                 {isCurrentDay && (
-                  <span className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white' : 'bg-indigo-400'} mt-0.5`} />
+                  <span className={`w-1 h-1 rounded-full ${isSelected ? 'bg-white' : 'bg-purple-400'} mt-0.5`} />
                 )}
               </button>
             );
@@ -171,7 +171,7 @@ export const Sidebar: React.FC = () => {
         <div className="mt-6 pt-4 border-t border-white/5">
           <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
             <div className="flex items-center gap-1.5">
-              <Layers className="w-3 h-3 text-indigo-400" />
+              <Layers className="w-3 h-3 text-purple-400" />
               <span>Linked Space Docs</span>
             </div>
             {isGuest && (
@@ -190,7 +190,7 @@ export const Sidebar: React.FC = () => {
               </p>
               <button
                 type="button"
-                className="text-[10px] text-indigo-300 hover:text-white underline font-semibold"
+                className="text-[10px] text-purple-300 hover:text-white underline font-semibold"
               >
                 Sign in with Google to connect
               </button>
@@ -202,7 +202,7 @@ export const Sidebar: React.FC = () => {
                   <FileText className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                   <span className="truncate">OMNI Ecosystem v1 Arch</span>
                 </div>
-                <span className="text-[9px] text-indigo-400/80 font-mono shrink-0">9:00 AM</span>
+                <span className="text-[9px] text-purple-400/80 font-mono shrink-0">9:00 AM</span>
               </div>
 
               <div className="group flex items-center justify-between p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 text-xs text-slate-300 transition-colors cursor-pointer">
